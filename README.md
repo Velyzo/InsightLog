@@ -11,6 +11,7 @@ pip install insightlog
 Better logging utility.
 
 </div>
+
 ## Overview
 
 `InsightLog` is a powerful logging utility designed to enhance the development experience by providing rich logging features, custom formats, and data visualization capabilities.
