@@ -1,0 +1,2 @@
+# InsightLog
+Better logging utility.
