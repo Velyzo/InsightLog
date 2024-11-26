@@ -8,7 +8,7 @@
 pip install insightlog
 ``` 
 
-Better logging utility.
+A powerful logging utility for better logging, visualizations, and more.
 
 </div>
 
@@ -44,7 +44,7 @@ pip install insightlog
 import insightlog
 
 # Create an instance of InsightLogger
-log_instance = insightlog.setup()
+log_instance = insightlog.setup(name="MyApp", log_filename="C:/path/to/logs/myapp.log")
 
 # Logging examples
 log_instance.success("This is a success log.")
@@ -92,5 +92,3 @@ MIT License. See [LICENSE](LICENSE) for details.
 Author: **Eldritchy**  
 Email: [eldritchy.help@gmail.com](mailto:eldritchy.help@gmail.com)  
 GitHub: [https://github.com/Eldritchy](https://github.com/Eldritchy)
-
----
