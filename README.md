@@ -44,7 +44,7 @@ pip install insightlog
 import insightlog
 
 # Create an instance of InsightLogger
-log_instance = insightlog.setup(name="MyApp", log_filename="C:/path/to/logs/myapp.log")
+log_instance = insightlog.setup(name="MyApp")
 
 # Logging examples
 log_instance.success("This is a success log.")

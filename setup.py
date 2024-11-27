@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name='InsightLog',
-    version='1.0',
+    version='1.1',
     packages=find_packages(), 
     license='MIT',
     description='A better logging utility with enhanced features.',
@@ -14,7 +14,7 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url='https://github.com/Eldritchy/InsightLog',
-    download_url='https://github.com/Eldritchy/InsightLog/archive/refs/tags/v1.0.tar.gz',
+    download_url='https://github.com/Eldritchy/InsightLog/archive/refs/tags/v1.1.tar.gz',
     keywords=[
         'eldritchy', 'logging', 'log', 'logger', 'better', 'utility', 'developer tools'
     ],

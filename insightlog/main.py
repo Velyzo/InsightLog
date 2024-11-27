@@ -1,15 +1,15 @@
 import logging
 import datetime
 import os
-from logging.handlers import RotatingFileHandler
-from termcolor import colored
-from tqdm import tqdm
 import random
 import time
 import itertools
+from tqdm import tqdm
+from logging.handlers import RotatingFileHandler
+from termcolor import colored
 
 
-def start_logging(name, save_log, log_dir="./logs", log_filename=None, max_bytes=1000000, backup_count=1, log_level=logging.DEBUG):
+def start_logging(name, save_log="disabled", log_dir="./logs", log_filename=None, max_bytes=1000000, backup_count=1, log_level=logging.DEBUG):
     logger = logging.getLogger(name)
 
     if not logger.hasHandlers():
@@ -19,35 +19,33 @@ def start_logging(name, save_log, log_dir="./logs", log_filename=None, max_bytes
             if not os.path.isdir(log_dir):
                 try:
                     os.mkdir(log_dir)
-                    logger.debug(f"Log directory created at {log_dir}")
+                    print(f"Log directory created at {log_dir}")
                 except Exception as e:
-                    logger.error(f"Failed to create log directory: {e}")
+                    print(f"Failed to create log directory: {e}")
                     raise
 
             if log_filename is None:
                 timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-                log_filename = f"{log_dir}/{timestamp}-app.log"
+                log_filename = os.path.join(log_dir, f"{timestamp}-app.log")
 
-        try:
-            file_handler = RotatingFileHandler(log_filename, maxBytes=max_bytes, backupCount=backup_count)
-            file_handler.setLevel(log_level)
-            file_formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-            file_handler.setFormatter(file_formatter)
-            logger.addHandler(file_handler)
-        except Exception as e:
-            logger.error(f"Failed to set up file handler: {e}")
-            raise
+            try:
+                file_handler = RotatingFileHandler(log_filename, maxBytes=max_bytes, backupCount=backup_count)
+                file_handler.setLevel(log_level)
+                file_formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+                file_handler.setFormatter(file_formatter)
+                logger.addHandler(file_handler)
+            except Exception as e:
+                print(f"Failed to set up file handler: {e}")
+                raise
 
         console_handler = logging.StreamHandler()
         console_handler.setLevel(log_level)
         console_formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
         console_handler.setFormatter(console_formatter)
-
-        logger.addHandler(file_handler)
         logger.addHandler(console_handler)
 
-        logger.debug(f"Logging initialized. Log file: {log_filename}")
-    
+        logger.debug(f"Logging initialized. Log file: {log_filename if save_log == 'enabled' else 'None'}")
+
     return logger
 
 
@@ -236,7 +234,7 @@ class CustomLogger:
 
 if __name__ == "__main__":
     try:
-        log_instance = CustomLogger(log_level=logging.DEBUG)
+        log_instance = CustomLogger(name="Hii")
         
         log_instance.success("This is a success log.")
         log_instance.failure("This is a failure log.")
