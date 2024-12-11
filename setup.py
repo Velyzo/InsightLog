@@ -9,12 +9,12 @@ setup(
     packages=find_packages(), 
     license='MIT',
     description='A better logging utility with enhanced features.',
-    author='Eldritchy',
+    author='Velis',
     author_email='eldritchy.help@gmail.com',
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url='https://github.com/Eldritchy/InsightLog',
-    download_url='https://github.com/Eldritchy/InsightLog/archive/refs/tags/v1.1.tar.gz',
+    url='https://github.com/VelisCore/InsightLog',
+    download_url='https://github.com/VelisCore/InsightLog/archive/refs/tags/v1.1.tar.gz',
     keywords=[
         'eldritchy', 'logging', 'log', 'logger', 'better', 'utility', 'developer tools'
     ],
