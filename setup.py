@@ -37,8 +37,8 @@ setup(
         'Operating System :: OS Independent',
     ],
     project_urls={
-        'Bug Tracker': 'https://github.com/Eldritchy/InsightLog/issues',
-        'Documentation': 'https://github.com/Eldritchy/InsightLog/wiki',
-        'Source Code': 'https://github.com/Eldritchy/InsightLog',
+        'Bug Tracker': 'https://github.com/VelisCore/InsightLog/issues',
+        'Documentation': 'https://github.com/VelisCore/InsightLog/wiki',
+        'Source Code': 'https://github.com/VelisCore/InsightLog',
     },
 )
