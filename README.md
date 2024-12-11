@@ -2,7 +2,7 @@
   
 # InsightLog
 
-[![License](https://img.shields.io/badge/License-MIT-blue)](https://github.com/Eldritchy/InsightLog#license)  [![PyPi](https://img.shields.io/badge/PyPi%20Link-FFFF00)](https://pypi.org/project/insightlog/)  <a href="https://github.com/D-I-Projects/diec/blob/master/CONTRIBUTING.md"> <img src="https://img.shields.io/github/contributors-anon/Eldritchy/InsightLog" alt="Contributors badge" /></a>  [![Downloads](https://static.pepy.tech/badge/insightlog)](https://pepy.tech/project/insightlog)
+[![License](https://img.shields.io/badge/License-MIT-blue)](https://github.com/VelisCore/InsightLog#license)  [![PyPi](https://img.shields.io/badge/PyPi%20Link-FFFF00)](https://pypi.org/project/insightlog/)  <a href="https://github.com/VelisCore/diec/blob/master/CONTRIBUTING.md"> <img src="https://img.shields.io/github/contributors-anon/Eldritchy/InsightLog" alt="Contributors badge" /></a>  [![Downloads](https://static.pepy.tech/badge/insightlog)](https://pepy.tech/project/insightlog)
 
 ```bash
 pip install insightlog
