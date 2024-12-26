@@ -1,1 +1,3 @@
-from .main import InsightLogger as setup
+from .insight_logger import InsightLogger
+
+__all__ = ['InsightLogger']

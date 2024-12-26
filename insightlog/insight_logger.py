@@ -1,7 +1,6 @@
 import logging
 import datetime
 import os
-import random
 import time
 import platform
 import psutil
@@ -12,9 +11,11 @@ from collections import defaultdict
 from logging.handlers import RotatingFileHandler
 from tabulate import tabulate
 import itertools
+import sys
+import io
 
 def ensure_insight_folder():
-    insight_dir = os.path.join(os.getcwd(), '.Insight')
+    insight_dir = os.path.join(os.getcwd(), '.insight')
     if not os.path.exists(insight_dir):
         os.makedirs(insight_dir)
     return insight_dir
@@ -30,6 +31,7 @@ def start_logging(name, save_log="enabled", log_dir=".Insight", log_filename=Non
     logger = logging.getLogger(name)
     if not logger.hasHandlers():
         logger.setLevel(log_level)
+        
         if save_log == "enabled":
             if not os.path.isdir(log_dir):
                 os.makedirs(log_dir)
@@ -41,11 +43,13 @@ def start_logging(name, save_log="enabled", log_dir=".Insight", log_filename=Non
             file_formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
             file_handler.setFormatter(file_formatter)
             logger.addHandler(file_handler)
+        
         console_handler = logging.StreamHandler()
         console_handler.setLevel(log_level)
         console_formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
         console_handler.setFormatter(console_formatter)
         logger.addHandler(console_handler)
+
     return logger
 
 class InsightLogger:
@@ -80,21 +84,22 @@ class InsightLogger:
             return result
         return wrapper
 
+
     def format_message(self, level, text, bold=False, background=None, border=False, header=False, underline=False, urgent=False):
         color = {
-            "INFO": "\033[92m",  
-            "SUCCESS": "\033[92m",  
-            "FAILURE": "\033[1;31m",  
-            "WARNING": "\033[93m",  
-            "DEBUG": "\033[94m",  
-            "ALERT": "\033[93m",  
-            "TRACE": "\033[96m",  
-            "HIGHLIGHT": "\033[1;33m",  
-            "BORDERED": "\033[1;34m",  
-            "HEADER": "\033[1;37m",  
-            "ERROR": "\033[91m",  
+            "INFO": "\033[92m",
+            "SUCCESS": "\033[92m",
+            "FAILURE": "\033[1;31m",
+            "WARNING": "\033[93m",
+            "DEBUG": "\033[94m",
+            "ALERT": "\033[93m",
+            "TRACE": "\033[96m",
+            "HIGHLIGHT": "\033[1;33m",
+            "BORDERED": "\033[1;34m",
+            "HEADER": "\033[1;37m",
+            "ERROR": "\033[91m",
             "CRITICAL": "\033[1;41m",
-        }.get(level, "\033[0m")  
+        }.get(level, "\033[0m")
 
         reset = "\033[0m"
         bold_style = "\033[1m" if bold else ""
@@ -162,11 +167,12 @@ class InsightLogger:
         table_rows = [(key, value) for key, value in environment_info.items()]
         table_footer = ["Total Errors", sum(self.error_count.values())]
 
-        summary_table = tabulate(table_rows + [table_footer], headers=table_header, tablefmt="fancy_grid", numalign="right")
+        summary_table = tabulate(table_rows + [table_footer], headers=table_header, tablefmt="grid", numalign="right")
 
         return summary_table
 
-if __name__ == "__main__":
+
+def main():
     try:
         insight_logger = InsightLogger(name="InsightLog")
 
@@ -176,6 +182,7 @@ if __name__ == "__main__":
 
         example_function()
 
+        # Example logs
         insight_logger.log_types("INFO", "This is an info log.")
         insight_logger.log_types("ERROR", "This is an error log.")
         insight_logger.log_types("SUCCESS", "This is a success log.")
@@ -194,3 +201,7 @@ if __name__ == "__main__":
 
     except Exception as e:
         insight_logger.logger.error(f"Error initializing InsightLogger: {e}")
+
+
+if __name__ == "__main__":
+    main()

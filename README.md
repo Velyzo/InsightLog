@@ -1,9 +1,8 @@
-
-# InsightLogger
+# **InsightLogger**
 
 `InsightLogger` is an advanced, customizable logging library designed for Python applications. It helps developers track application performance, log detailed error messages, visualize data through charts, and create summaries of application execution.
 
-## Features
+## **Features**
 
 - **Flexible Logging**: Supports multiple log levels (INFO, DEBUG, ERROR, etc.) with customizable formatting.
 - **Rotating Logs**: Automatically manages log file size to prevent excessive disk usage.
@@ -14,28 +13,31 @@
 
 ---
 
-## Installation
+## **Installation**
 
 1. Clone the repository:
+
    ```bash
    git clone https://github.com/VelisCore/InsightLogger.git
    ```
+
 2. Install required dependencies:
+
    ```bash
    pip install -r requirements.txt
    ```
 
-Dependencies include:
-- `termcolor`
-- `matplotlib`
-- `tabulate`
-- `psutil`
+   Dependencies include:
+   - `termcolor`
+   - `matplotlib`
+   - `tabulate`
+   - `psutil`
 
 ---
 
-## Usage
+## **Usage**
 
-### Getting Started
+### **Getting Started**
 
 ```python
 from insight_logger import InsightLogger
@@ -57,15 +59,17 @@ summary = logger.generate_log_summary()
 logger.logger.info("\nSummary of Logs:\n" + summary)
 ```
 
-### Decorators
+### **Decorators**
+
 Measure execution time for any function:
+
 ```python
 @logger.log_function_time
 def sample_function():
     time.sleep(1.5)
 ```
 
-### Log Levels
+### **Log Levels**
 
 Supported log levels include:
 - `INFO`
@@ -79,7 +83,8 @@ Supported log levels include:
 - `HIGHLIGHT`
 - `CRITICAL`
 
-### Environment Summary
+### **Environment Summary**
+
 `InsightLogger` automatically collects environment information, such as:
 - Python version
 - Operating system and version
@@ -88,9 +93,10 @@ Supported log levels include:
 
 ---
 
-## Example Output
+## **Example Output**
 
 ### Console Output
+
 ```
 [INFO] This is an info log.
 [ERROR] An error occurred.
@@ -98,6 +104,7 @@ Function 'example_function' executed in 1500.12 ms.
 ```
 
 ### Summary Table
+
 | Environment Info       | Details                 |
 |------------------------|-------------------------|
 | Python Version         | 3.10                   |
@@ -106,11 +113,13 @@ Function 'example_function' executed in 1500.12 ms.
 | Total Errors           | 1                      |
 
 ### Log Frequency Graph
+
 ![Log Frequency](.Insight/2023-12-01/log_frequency.png)
 
 ---
 
-## Contribution
+## **Contribution**
+
 We welcome contributions to `InsightLogger`. To contribute:
 1. Fork the repository.
 2. Create a new branch for your feature or bug fix.
@@ -118,15 +127,18 @@ We welcome contributions to `InsightLogger`. To contribute:
 
 ---
 
-## License
+## **License**
+
 `InsightLogger` is licensed under the MIT License. See `LICENSE` for details.
 
 ---
 
-## Support
+## **Support**
+
 For issues or feature requests, please [open an issue](https://github.com/VelisCore/InsightLogger/issues).
 
 ---
 
-## Author
+## **Author**
+
 Developed by **VelisCore**.

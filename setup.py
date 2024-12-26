@@ -1,11 +1,12 @@
 from setuptools import setup, find_packages
 
+# Read the long description from README.md
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setup(
     name='InsightLogger',
-    version='1.2.1',
+    version='1.2.2',
     packages=find_packages(), 
     license='MIT',
     description='A customizable logging utility with enhanced features for developers.',
@@ -14,7 +15,7 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url='https://github.com/VelisCore/InsightLogger',
-    download_url='https://github.com/VelisCore/InsightLogger/archive/refs/tags/v1.2.1tar.gz',
+    download_url='https://github.com/VelisCore/InsightLogger/archive/refs/tags/v1.2.2.tar.gz',
     keywords=[
         'logging', 'log', 'logger', 'developer tools', 'performance monitoring', 'visualization'
     ],
