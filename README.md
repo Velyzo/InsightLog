@@ -1,94 +1,132 @@
-<div align="center">
-  
-# InsightLog
 
-[![License](https://img.shields.io/badge/License-MIT-blue)](https://github.com/VelisCore/InsightLog#license)  [![PyPi](https://img.shields.io/badge/PyPi%20Link-FFFF00)](https://pypi.org/project/insightlog/)  <a href="https://github.com/VelisCore/diec/blob/master/CONTRIBUTING.md"> <img src="https://img.shields.io/github/contributors-anon/Eldritchy/InsightLog" alt="Contributors badge" /></a>  [![Downloads](https://static.pepy.tech/badge/insightlog)](https://pepy.tech/project/insightlog)
+# InsightLogger
 
-```bash
-pip install insightlog
-``` 
-
-A powerful logging utility for better logging, visualizations, and more.
-
-</div>
-
-## Overview
-
-`InsightLog` is a powerful logging utility designed to enhance the development experience by providing rich logging features, custom formats, and data visualization capabilities.
+`InsightLogger` is an advanced, customizable logging library designed for Python applications. It helps developers track application performance, log detailed error messages, visualize data through charts, and create summaries of application execution.
 
 ## Features
 
-- **Custom Log Levels**: Define log messages with specialized methods like `success`, `alert`, or `highlight`.
-- **File Rotation**: Automatically manage log file sizes and backups using `RotatingFileHandler`.
-- **Data Visualizations**: Generate ASCII-based bar charts, pie charts, and more.
-- **Styled Logging**: Add colors, highlights, and borders to your logs for better readability.
-- **Dynamic Progress Bars**: Smoothly integrated progress tracking using `tqdm`.
+- **Flexible Logging**: Supports multiple log levels (INFO, DEBUG, ERROR, etc.) with customizable formatting.
+- **Rotating Logs**: Automatically manages log file size to prevent excessive disk usage.
+- **Execution Time Tracking**: Decorate functions to measure and log execution time with live spinning animation.
+- **Log Visualization**: Automatically generate bar graphs showing log level frequencies.
+- **Environment Summary**: Generate detailed summaries of the runtime environment and execution statistics.
+- **Enhanced Formatting**: Add styles like bold, underline, headers, and more to log messages.
 
 ---
 
 ## Installation
 
-Install `InsightLog` with pip:
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/VelisCore/InsightLogger.git
+   ```
+2. Install required dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-```bash
-pip install insightlog
-```
+Dependencies include:
+- `termcolor`
+- `matplotlib`
+- `tabulate`
+- `psutil`
 
 ---
 
 ## Usage
 
-### Setting Up a Logger
+### Getting Started
 
 ```python
-import insightlog
+from insight_logger import InsightLogger
 
-# Create an instance of InsightLogger
-log_instance = insightlog.setup(name="MyApp")
+# Initialize the logger
+logger = InsightLogger(name="AppLog")
 
-# Logging examples
-log_instance.success("This is a success log.")
-log_instance.failure("This is a failure log.")
-log_instance.alert("This is an alert log.")
-log_instance.trace("This is a trace log.")
-log_instance.highlight("This is a highlighted log.")
-log_instance.bordered("This is a bordered log.")
-log_instance.header("This is a header log.")
-log_instance.debug_underline("This is a debug underline log.")
-log_instance.alert_urgent("This is an urgent alert log.")
+@logger.log_function_time
+def example_function():
+    time.sleep(2)
 
-# Visualizations
-log_instance.draw_bar_chart()
-log_instance.draw_pie_chart()
-log_instance.draw_line_chart()
-log_instance.draw_scatter_plot()
-log_instance.draw_waterfall_chart()
+# Logging
+logger.log_types("INFO", "This is an info log.")
+logger.log_types("ERROR", "An error occurred.")
 
-# Progress bar
-log_instance.draw_progress_bar(total=100, duration=5, description="Loading...")
-
-# Table
-data = [["Name", "Age", "Location"], ["John", 30, "New York"], ["Jane", 25, "Los Angeles"]]
-log_instance.print_table(data)
-log_instance.print_ascii_art("Sample ASCII Art")
-log_instance.color_gradient("Gradient Text", start_color="red", end_color="blue")
-log_instance.spin_animation(duration=5)
+# Visualize logs and generate a summary
+logger.draw_and_save_graph()
+summary = logger.generate_log_summary()
+logger.logger.info("\nSummary of Logs:\n" + summary)
 ```
 
+### Decorators
+Measure execution time for any function:
+```python
+@logger.log_function_time
+def sample_function():
+    time.sleep(1.5)
+```
+
+### Log Levels
+
+Supported log levels include:
+- `INFO`
+- `ERROR`
+- `SUCCESS`
+- `FAILURE`
+- `WARNING`
+- `DEBUG`
+- `ALERT`
+- `TRACE`
+- `HIGHLIGHT`
+- `CRITICAL`
+
+### Environment Summary
+`InsightLogger` automatically collects environment information, such as:
+- Python version
+- Operating system and version
+- Machine specifications (CPU, memory, etc.)
+- Execution start and end times
+
 ---
 
-## Requirements
+## Example Output
 
-- Python >= 3.9
-- `termcolor`
-- `tqdm`
+### Console Output
+```
+[INFO] This is an info log.
+[ERROR] An error occurred.
+Function 'example_function' executed in 1500.12 ms.
+```
+
+### Summary Table
+| Environment Info       | Details                 |
+|------------------------|-------------------------|
+| Python Version         | 3.10                   |
+| Operating System       | Windows                |
+| Memory                 | 16.00 GB               |
+| Total Errors           | 1                      |
+
+### Log Frequency Graph
+![Log Frequency](.Insight/2023-12-01/log_frequency.png)
+
+---
+
+## Contribution
+We welcome contributions to `InsightLogger`. To contribute:
+1. Fork the repository.
+2. Create a new branch for your feature or bug fix.
+3. Submit a pull request with detailed descriptions of changes.
+
+---
 
 ## License
-
-MIT License. See [LICENSE](LICENSE) for details.
+`InsightLogger` is licensed under the MIT License. See `LICENSE` for details.
 
 ---
 
-Author: **Eldritchy**  
-Email: [eldritchy.help@gmail.com](mailto:eldritchy.help@gmail.com)  
-GitHub: [https://github.com/Eldritchy](https://github.com/Eldritchy)
+## Support
+For issues or feature requests, please [open an issue](https://github.com/VelisCore/InsightLogger/issues).
+
+---
+
+## Author
+Developed by **VelisCore**.

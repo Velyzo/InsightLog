@@ -3,114 +3,97 @@ import datetime
 import os
 import random
 import time
-import itertools
-from tqdm import tqdm
-from logging.handlers import RotatingFileHandler
+import platform
+import psutil
+import threading
 from termcolor import colored
+import matplotlib.pyplot as plt
+from collections import defaultdict
+from logging.handlers import RotatingFileHandler
+from tabulate import tabulate
+import itertools
 
+def ensure_insight_folder():
+    insight_dir = os.path.join(os.getcwd(), '.Insight')
+    if not os.path.exists(insight_dir):
+        os.makedirs(insight_dir)
+    return insight_dir
 
-def start_logging(name, save_log="disabled", log_dir="./logs", log_filename=None, max_bytes=1000000, backup_count=1, log_level=logging.DEBUG):
+def create_run_folder():
+    timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    run_folder = os.path.join('.Insight', timestamp)
+    if not os.path.exists(run_folder):
+        os.makedirs(run_folder)
+    return run_folder
+
+def start_logging(name, save_log="enabled", log_dir=".Insight", log_filename=None, max_bytes=1000000, backup_count=1, log_level=logging.DEBUG):
     logger = logging.getLogger(name)
-
     if not logger.hasHandlers():
         logger.setLevel(log_level)
-
         if save_log == "enabled":
             if not os.path.isdir(log_dir):
-                try:
-                    os.mkdir(log_dir)
-                    print(f"Log directory created at {log_dir}")
-                except Exception as e:
-                    print(f"Failed to create log directory: {e}")
-                    raise
-
+                os.makedirs(log_dir)
+            run_folder = create_run_folder()
             if log_filename is None:
-                timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-                log_filename = os.path.join(log_dir, f"{timestamp}-app.log")
-
-            try:
-                file_handler = RotatingFileHandler(log_filename, maxBytes=max_bytes, backupCount=backup_count)
-                file_handler.setLevel(log_level)
-                file_formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-                file_handler.setFormatter(file_formatter)
-                logger.addHandler(file_handler)
-            except Exception as e:
-                print(f"Failed to set up file handler: {e}")
-                raise
-
+                log_filename = os.path.join(run_folder, "app.log")
+            file_handler = RotatingFileHandler(log_filename, maxBytes=max_bytes, backupCount=backup_count)
+            file_handler.setLevel(log_level)
+            file_formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+            file_handler.setFormatter(file_formatter)
+            logger.addHandler(file_handler)
         console_handler = logging.StreamHandler()
         console_handler.setLevel(log_level)
         console_formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
         console_handler.setFormatter(console_formatter)
         logger.addHandler(console_handler)
-
-        logger.debug(f"Logging initialized. Log file: {log_filename if save_log == 'enabled' else 'None'}")
-
     return logger
 
-
-class CustomLogger:
-    def __init__(self, name, save_log="disabled", log_dir="./logs", log_filename=None, max_bytes=1000000, backup_count=1, log_level=logging.DEBUG):
+class InsightLogger:
+    def __init__(self, name, save_log="enabled", log_dir=".Insight", log_filename=None, max_bytes=1000000, backup_count=1, log_level=logging.DEBUG):
         self.logger = start_logging(name, save_log, log_dir, log_filename, max_bytes, backup_count, log_level)
+        self.insight_dir = ensure_insight_folder()
+        self.error_count = defaultdict(int)
+        self.run_folder = create_run_folder()
+        self.start_time = datetime.datetime.now()
 
-    def info(self, text):
-        self.logger.info(self.format_message("INFO", text))
+    def log_function_time(self, func):
+        def wrapper(*args, **kwargs):
+            start_time = time.time()
+            spinner = itertools.cycle(['-', '\\', '|', '/'])
+            elapsed_time_ms = 0
 
-    def warning(self, text):
-        self.logger.warning(self.format_message("WARNING", text))
+            def spin():
+                nonlocal elapsed_time_ms
+                while True:
+                    elapsed_time_ms = (time.time() - start_time) * 1000
+                    print(f"\r[{next(spinner)}] {elapsed_time_ms:.2f} ms", end="")
+                    time.sleep(0.1)
 
-    def error(self, text):
-        self.logger.error(self.format_message("ERROR", text))
+            spin_thread = threading.Thread(target=spin, daemon=True)
+            spin_thread.start()
 
-    def debug(self, text):
-        self.logger.debug(self.format_message("DEBUG", text))
+            result = func(*args, **kwargs)
 
-    def critical(self, text):
-        self.logger.critical(self.format_message("CRITICAL", text))
-
-    def success(self, text):
-        self.logger.info(self.format_message("SUCCESS", text))
-
-    def failure(self, text):
-        self.logger.error(self.format_message("FAILURE", text))
-
-    def alert(self, text):
-        self.logger.warning(self.format_message("ALERT", text))
-
-    def trace(self, text):
-        self.logger.debug(self.format_message("TRACE", text))
-
-    def highlight(self, text):
-        self.logger.info(self.format_message("HIGHLIGHT", text, background="yellow", bold=True))
-
-    def bordered(self, text):
-        self.logger.info(self.format_message("BORDERED", text, border=True))
-
-    def header(self, text):
-        self.logger.info(self.format_message("HEADER", text, header=True))
-
-    def debug_underline(self, text):
-        self.logger.debug(self.format_message("DEBUG UNDERLINE", text, underline=True))
-
-    def alert_urgent(self, text):
-        self.logger.error(self.format_message("ALERT URGENT", text, urgent=True))
+            elapsed_time_ms = (time.time() - start_time) * 1000
+            print(f"\rFunction '{func.__name__}' executed in {elapsed_time_ms:.2f} ms.")
+            self.logger.info(f"Function '{func.__name__}' executed in {elapsed_time_ms:.2f} ms.")
+            return result
+        return wrapper
 
     def format_message(self, level, text, bold=False, background=None, border=False, header=False, underline=False, urgent=False):
         color = {
             "INFO": "\033[92m",  
-            "WARNING": "\033[93m",  
-            "ERROR": "\033[91m",  
-            "DEBUG": "\033[94m",  
-            "CRITICAL": "\033[1;41m",  
             "SUCCESS": "\033[92m",  
             "FAILURE": "\033[1;31m",  
+            "WARNING": "\033[93m",  
+            "DEBUG": "\033[94m",  
             "ALERT": "\033[93m",  
             "TRACE": "\033[96m",  
             "HIGHLIGHT": "\033[1;33m",  
             "BORDERED": "\033[1;34m",  
             "HEADER": "\033[1;37m",  
-            "DEBUG UNDERLINE": "\033[4m",  
-            "ALERT URGENT": "\033[5;1;31m",
+            "ERROR": "\033[91m",  
+            "CRITICAL": "\033[1;41m",
         }.get(level, "\033[0m")  
 
         reset = "\033[0m"
@@ -119,146 +102,95 @@ class CustomLogger:
         background_style = f"\033[48;5;226m" if background else ""
         urgent_style = "\033[5m" if urgent else ""
 
-        border_style = "\033[1;37m" if border else ""
-
-        if border:
-            return f"{border_style}+{'-' * (len(text) + 2)}+\n| {text} |\n+{'-' * (len(text) + 2)}+"
-
-        if header:
-            return f"{bold_style}{color}{text}{reset}"
-
         return f"{color}{bold_style}{underline_style}{background_style}{urgent_style}{text}{reset}"
 
-    def draw_progress_bar(self, total=100, duration=5, description="Lädt...", color='green'):
-        step_duration = duration / total
-        pbar = tqdm(total=total, desc=description, ncols=100, ascii=True, bar_format="{l_bar}{bar}| {n_fmt}/{total_fmt} [{elapsed} < {remaining}]")
-        pbar.set_postfix(color=color)
-        for i in range(total):
-            time.sleep(step_duration)
-            pbar.update(1)
-        pbar.close()
+    def log_types(self, level, text):
+        self.error_count[level] += 1
+        if level == "INFO":
+            self.logger.info(self.format_message("INFO", text))
+        elif level == "ERROR":
+            self.logger.error(self.format_message("ERROR", text))
+        elif level == "SUCCESS":
+            self.logger.info(self.format_message("SUCCESS", text))
+        elif level == "FAILURE":
+            self.logger.error(self.format_message("FAILURE", text))
+        elif level == "WARNING":
+            self.logger.warning(self.format_message("WARNING", text))
+        elif level == "DEBUG":
+            self.logger.debug(self.format_message("DEBUG", text))
+        elif level == "ALERT":
+            self.logger.warning(self.format_message("ALERT", text))
+        elif level == "TRACE":
+            self.logger.debug(self.format_message("TRACE", text))
+        elif level == "HIGHLIGHT":
+            self.logger.info(self.format_message("HIGHLIGHT", text))
+        elif level == "CRITICAL":
+            self.logger.critical(self.format_message("CRITICAL", text))
 
-    def draw_bar_chart(self, values=None):
-        if values is None:
-            values = {"A": random.randint(1, 10), "B": random.randint(1, 10), "C": random.randint(1, 10)}
+    def draw_and_save_graph(self):
+        log_levels = list(self.error_count.keys())
+        counts = list(self.error_count.values())
 
-        print("\nSäulendiagramm (ASCII):")
-        max_height = max(values.values())
-        for i in range(max_height, 0, -1):
-            for key in values:
-                if values[key] >= i:
-                    print("█", end="  ")
-                else:
-                    print("   ", end="  ")
-            print()
-        print("   " + "  ".join(values.keys()))
+        fig, ax = plt.subplots()
+        ax.bar(log_levels, counts, color='lightblue')
+        ax.set_xlabel('Log Level')
+        ax.set_ylabel('Frequency')
+        ax.set_title('Log Level Frequency')
+        ax.tick_params(axis='x', rotation=45)
+        fig.tight_layout()
+        file_path = os.path.join(self.run_folder, 'log_frequency.png')
+        plt.savefig(file_path)
+        plt.close()
 
-    def draw_pie_chart(self, values=None):
-        if values is None:
-            values = {"A": 30, "B": 50, "C": 20}
+        self.logger.info(f"Log frequency graph saved to {file_path}")
 
-        print("\nKreisdiagramm (ASCII):")
-        total = sum(values.values())
-        for key, value in values.items():
-            percentage = (value / total) * 100
-            print(f"{key}: {'#' * int(percentage // 2)} ({percentage:.2f}%)")
+    def generate_log_summary(self):
+        environment_info = {
+            "Python Version": platform.python_version(),
+            "Operating System": platform.system(),
+            "OS Version": platform.version(),
+            "Machine": platform.machine(),
+            "Processor": platform.processor(),
+            "CPU Cores": psutil.cpu_count(),
+            "Memory": f"{psutil.virtual_memory().total / (1024 * 1024 * 1024):.2f} GB",
+            "Timestamp Started": self.start_time.strftime('%Y-%m-%d %H:%M:%S'),
+            "Timestamp Ended": datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+            "Run Duration (seconds)": (datetime.datetime.now() - self.start_time).total_seconds()
+        }
 
-    def draw_line_chart(self, values=None):
-        if values is None:
-            values = [random.randint(1, 10) for _ in range(10)]
-        
-        print("\nLiniendiagramm (ASCII):")
-        for i, value in enumerate(values):
-            print(f"{i+1}: {'-'*value} ({value})")
+        table_header = ["Environment Info", "Details"]
+        table_rows = [(key, value) for key, value in environment_info.items()]
+        table_footer = ["Total Errors", sum(self.error_count.values())]
 
-    def draw_scatter_plot(self, values=None):
-        if values is None:
-            values = [(random.randint(1, 10), random.randint(1, 10)) for _ in range(10)]
-        
-        print("\nPunkt-Diagramm (ASCII):")
-        for x, y in values:
-            print(f"({x},{y})", end=" ")
-        print()
+        summary_table = tabulate(table_rows + [table_footer], headers=table_header, tablefmt="fancy_grid", numalign="right")
 
-    def draw_waterfall_chart(self, values=None):
-        if values is None:
-            values = [5, -3, 8, -2, 4]
-
-        print("\nWasserfall-Diagramm:")
-        current = 0
-        for value in values:
-            current += value
-            print(f" {current:4d} {'▲' if value > 0 else '▼'} {value:3d}")
-
-    def draw_circular_progress(self, current, total):
-        progress = (current / total) * 100
-        progress_bar = "◉" * int(progress // 10) + "○" * (10 - int(progress // 10))
-        print(f"Kreisförmiger Fortschritt: {progress:.2f}% [{progress_bar}]")
-
-    def display_percentage(self, current, total):
-        percent = (current / total) * 100
-        print(f"{'='*int(percent//2)} {percent:.2f}%")
-
-    def print_table(self, data, headers=None):
-        print("\nTabellen-Darstellung:")
-        if headers:
-            print(f"{' | '.join(headers)}")
-        for row in data:
-            print(f"{' | '.join(str(cell) for cell in row)}")
-
-    def print_ascii_art(self, text):
-        print(f"\nASCII-Art Darstellung: \n{text}")
-
-    def color_gradient(self, text, start_color="red", end_color="yellow"):
-        gradient = self.create_gradient(text, start_color, end_color)
-        print(f"\nFarb-Gradient: \n{gradient}")
-
-    def create_gradient(self, text, start_color, end_color):
-        colors = ['red', 'yellow', 'green', 'blue', 'cyan', 'magenta', 'white']
-        start_index = colors.index(start_color)
-        end_index = colors.index(end_color)
-        gradient_text = ""
-        step = (end_index - start_index) // len(text)
-        for i, char in enumerate(text):
-            color = colors[(start_index + step * i) % len(colors)]
-            gradient_text += colored(char, color)
-        return gradient_text
-
-    def spin_animation(self, duration=5):
-        spinner = itertools.cycle(['|', '/', '-', '\\'])
-        end_time = time.time() + duration
-        while time.time() < end_time:
-            print(f"\r{next(spinner)}", end="")
-            time.sleep(0.1)
-
+        return summary_table
 
 if __name__ == "__main__":
     try:
-        log_instance = CustomLogger(name="Hii")
-        
-        log_instance.success("This is a success log.")
-        log_instance.failure("This is a failure log.")
-        log_instance.alert("This is an alert log.")
-        log_instance.trace("This is a trace log.")
-        log_instance.highlight("This is a highlighted log.")
-        log_instance.bordered("This is a bordered log.")
-        log_instance.header("This is a header log.")
-        log_instance.debug_underline("This is a debug underline log.")
-        log_instance.alert_urgent("This is an urgent alert log.")
+        insight_logger = InsightLogger(name="InsightLog")
 
-        log_instance.draw_bar_chart()
-        log_instance.draw_pie_chart()
-        log_instance.draw_line_chart()
-        log_instance.draw_scatter_plot()
-        log_instance.draw_waterfall_chart()
+        @insight_logger.log_function_time
+        def example_function():
+            time.sleep(1.5)
 
-        log_instance.draw_progress_bar(total=100, duration=5, description="Loading...")
-        
-        data = [["Name", "Age", "Location"], ["John", 30, "New York"], ["Jane", 25, "Los Angeles"]]
-        log_instance.print_table(data)
-        log_instance.print_ascii_art("Sample ASCII Art")
-        log_instance.color_gradient("Gradient Text", start_color="red", end_color="blue")
-        log_instance.spin_animation(duration=5)
+        example_function()
+
+        insight_logger.log_types("INFO", "This is an info log.")
+        insight_logger.log_types("ERROR", "This is an error log.")
+        insight_logger.log_types("SUCCESS", "This is a success log.")
+        insight_logger.log_types("FAILURE", "This is a failure log.")
+        insight_logger.log_types("WARNING", "This is a warning log.")
+        insight_logger.log_types("DEBUG", "This is a debug log.")
+        insight_logger.log_types("ALERT", "This is an alert log.")
+        insight_logger.log_types("TRACE", "This is a trace log.")
+        insight_logger.log_types("HIGHLIGHT", "This is a highlight log.")
+        insight_logger.log_types("CRITICAL", "This is a critical log.")
+
+        insight_logger.draw_and_save_graph()
+
+        summary = insight_logger.generate_log_summary()
+        insight_logger.logger.info("\nSummary of Logs:\n" + summary)
 
     except Exception as e:
-        logging.error(f"Fehler bei der Initialisierung des Loggers: {e}")
+        insight_logger.logger.error(f"Error initializing InsightLogger: {e}")
