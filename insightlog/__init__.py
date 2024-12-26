@@ -1,1 +1,1 @@
-from .main import CustomLogger as setup
+from .main import InsightLogger as setup
