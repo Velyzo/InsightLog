@@ -40,7 +40,7 @@
 ### **Getting Started**
 
 ```python
-from insight_logger import InsightLogger
+from insightlog import InsightLogger
 
 # Initialize the logger
 logger = InsightLogger(name="AppLog")
