@@ -14,36 +14,30 @@ import itertools
 import sys
 import io
 
+
 def ensure_insight_folder():
-    insight_dir = os.path.join(os.getcwd(), '.insight')
+    insight_dir = os.path.join(os.getcwd(), '.insight')  # Changed from '.Insight' to '.insight' to be consistent
     if not os.path.exists(insight_dir):
         os.makedirs(insight_dir)
     return insight_dir
 
-def create_run_folder():
-    timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    run_folder = os.path.join('.Insight', timestamp)
-    if not os.path.exists(run_folder):
-        os.makedirs(run_folder)
-    return run_folder
 
-def start_logging(name, save_log="enabled", log_dir=".Insight", log_filename=None, max_bytes=1000000, backup_count=1, log_level=logging.DEBUG):
+def start_logging(name, save_log="enabled", log_dir=".insight", log_filename="app.log", max_bytes=1000000, backup_count=1, log_level=logging.DEBUG):
     logger = logging.getLogger(name)
     if not logger.hasHandlers():
         logger.setLevel(log_level)
-        
+
         if save_log == "enabled":
             if not os.path.isdir(log_dir):
                 os.makedirs(log_dir)
-            run_folder = create_run_folder()
-            if log_filename is None:
-                log_filename = os.path.join(run_folder, "app.log")
-            file_handler = RotatingFileHandler(log_filename, maxBytes=max_bytes, backupCount=backup_count)
+
+            log_file = os.path.join(log_dir, log_filename)  # Using a single log file 'app.log'
+            file_handler = RotatingFileHandler(log_file, maxBytes=max_bytes, backupCount=backup_count)
             file_handler.setLevel(log_level)
             file_formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
             file_handler.setFormatter(file_formatter)
             logger.addHandler(file_handler)
-        
+
         console_handler = logging.StreamHandler()
         console_handler.setLevel(log_level)
         console_formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
@@ -52,12 +46,12 @@ def start_logging(name, save_log="enabled", log_dir=".Insight", log_filename=Non
 
     return logger
 
+
 class InsightLogger:
-    def __init__(self, name, save_log="enabled", log_dir=".Insight", log_filename=None, max_bytes=1000000, backup_count=1, log_level=logging.DEBUG):
+    def __init__(self, name, save_log="enabled", log_dir=".insight", log_filename="app.log", max_bytes=1000000, backup_count=1, log_level=logging.DEBUG):
         self.logger = start_logging(name, save_log, log_dir, log_filename, max_bytes, backup_count, log_level)
         self.insight_dir = ensure_insight_folder()
         self.error_count = defaultdict(int)
-        self.run_folder = create_run_folder()
         self.start_time = datetime.datetime.now()
 
     def log_function_time(self, func):
@@ -83,7 +77,6 @@ class InsightLogger:
             self.logger.info(f"Function '{func.__name__}' executed in {elapsed_time_ms:.2f} ms.")
             return result
         return wrapper
-
 
     def format_message(self, level, text, bold=False, background=None, border=False, header=False, underline=False, urgent=False):
         color = {
@@ -143,7 +136,7 @@ class InsightLogger:
         ax.set_title('Log Level Frequency')
         ax.tick_params(axis='x', rotation=45)
         fig.tight_layout()
-        file_path = os.path.join(self.run_folder, 'log_frequency.png')
+        file_path = os.path.join(self.insight_dir, 'log_frequency.png')  # Save the graph in the '.insight' folder
         plt.savefig(file_path)
         plt.close()
 
@@ -182,7 +175,6 @@ def main():
 
         example_function()
 
-        # Example logs
         insight_logger.log_types("INFO", "This is an info log.")
         insight_logger.log_types("ERROR", "This is an error log.")
         insight_logger.log_types("SUCCESS", "This is a success log.")
