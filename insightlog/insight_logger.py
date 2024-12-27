@@ -11,12 +11,9 @@ from collections import defaultdict
 from logging.handlers import RotatingFileHandler
 from tabulate import tabulate
 import itertools
-import sys
-import io
-
 
 def ensure_insight_folder():
-    insight_dir = os.path.join(os.getcwd(), '.insight')  # Changed from '.Insight' to '.insight' to be consistent
+    insight_dir = os.path.join(os.getcwd(), '.insight')
     if not os.path.exists(insight_dir):
         os.makedirs(insight_dir)
     return insight_dir
@@ -31,7 +28,7 @@ def start_logging(name, save_log="enabled", log_dir=".insight", log_filename="ap
             if not os.path.isdir(log_dir):
                 os.makedirs(log_dir)
 
-            log_file = os.path.join(log_dir, log_filename)  # Using a single log file 'app.log'
+            log_file = os.path.join(log_dir, log_filename) 
             file_handler = RotatingFileHandler(log_file, maxBytes=max_bytes, backupCount=backup_count)
             file_handler.setLevel(log_level)
             file_formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
@@ -57,23 +54,25 @@ class InsightLogger:
     def log_function_time(self, func):
         def wrapper(*args, **kwargs):
             start_time = time.time()
-            spinner = itertools.cycle(['-', '\\', '|', '/'])
+            spinner = itertools.cycle(['⚙️', '🔄', '💨', '✨', '🔥', '🌟'])
             elapsed_time_ms = 0
 
             def spin():
                 nonlocal elapsed_time_ms
-                while True:
+                while not self._stop_spin:
                     elapsed_time_ms = (time.time() - start_time) * 1000
-                    print(f"\r[{next(spinner)}] {elapsed_time_ms:.2f} ms", end="")
+                    print(f"\r{colored(f'{next(spinner)} Processing...', 'cyan', attrs=['bold'])} {elapsed_time_ms:.2f} ms", end="")
                     time.sleep(0.1)
 
+            self._stop_spin = False
             spin_thread = threading.Thread(target=spin, daemon=True)
             spin_thread.start()
 
             result = func(*args, **kwargs)
 
+            self._stop_spin = True
             elapsed_time_ms = (time.time() - start_time) * 1000
-            print(f"\rFunction '{func.__name__}' executed in {elapsed_time_ms:.2f} ms.")
+            print(f"\r{colored(f'✔️ {func.__name__} executed in {elapsed_time_ms:.2f} ms.', 'green', attrs=['bold'])}")
             self.logger.info(f"Function '{func.__name__}' executed in {elapsed_time_ms:.2f} ms.")
             return result
         return wrapper
@@ -105,38 +104,39 @@ class InsightLogger:
     def log_types(self, level, text):
         self.error_count[level] += 1
         if level == "INFO":
-            self.logger.info(self.format_message("INFO", text))
+            self.logger.info(self.format_message("INFO", text, bold=True))
         elif level == "ERROR":
-            self.logger.error(self.format_message("ERROR", text))
+            self.logger.error(self.format_message("ERROR", text, bold=True, background=True))
         elif level == "SUCCESS":
-            self.logger.info(self.format_message("SUCCESS", text))
+            self.logger.info(self.format_message("SUCCESS", text, bold=True))
         elif level == "FAILURE":
-            self.logger.error(self.format_message("FAILURE", text))
+            self.logger.error(self.format_message("FAILURE", text, bold=True))
         elif level == "WARNING":
-            self.logger.warning(self.format_message("WARNING", text))
+            self.logger.warning(self.format_message("WARNING", text, bold=True))
         elif level == "DEBUG":
             self.logger.debug(self.format_message("DEBUG", text))
         elif level == "ALERT":
-            self.logger.warning(self.format_message("ALERT", text))
+            self.logger.warning(self.format_message("ALERT", text, bold=True))
         elif level == "TRACE":
             self.logger.debug(self.format_message("TRACE", text))
         elif level == "HIGHLIGHT":
-            self.logger.info(self.format_message("HIGHLIGHT", text))
+            self.logger.info(self.format_message("HIGHLIGHT", text, bold=True))
         elif level == "CRITICAL":
-            self.logger.critical(self.format_message("CRITICAL", text))
+            self.logger.critical(self.format_message("CRITICAL", text, bold=True))
 
     def draw_and_save_graph(self):
         log_levels = list(self.error_count.keys())
         counts = list(self.error_count.values())
 
         fig, ax = plt.subplots()
-        ax.bar(log_levels, counts, color='lightblue')
-        ax.set_xlabel('Log Level')
-        ax.set_ylabel('Frequency')
-        ax.set_title('Log Level Frequency')
+        ax.bar(log_levels, counts, color='lightblue', edgecolor='darkblue')
+        ax.set_xlabel('Log Level', fontsize=12, fontweight='bold')
+        ax.set_ylabel('Frequency', fontsize=12, fontweight='bold')
+        ax.set_title('Log Level Frequency', fontsize=14, fontweight='bold')
         ax.tick_params(axis='x', rotation=45)
         fig.tight_layout()
-        file_path = os.path.join(self.insight_dir, 'log_frequency.png')  # Save the graph in the '.insight' folder
+
+        file_path = os.path.join(self.insight_dir, 'log_frequency.png')
         plt.savefig(file_path)
         plt.close()
 
@@ -160,7 +160,7 @@ class InsightLogger:
         table_rows = [(key, value) for key, value in environment_info.items()]
         table_footer = ["Total Errors", sum(self.error_count.values())]
 
-        summary_table = tabulate(table_rows + [table_footer], headers=table_header, tablefmt="grid", numalign="right")
+        summary_table = tabulate(table_rows + [table_footer], headers=table_header, tablefmt="fancy_grid", numalign="right")
 
         return summary_table
 
@@ -175,24 +175,24 @@ def main():
 
         example_function()
 
-        insight_logger.log_types("INFO", "This is an info log.")
-        insight_logger.log_types("ERROR", "This is an error log.")
-        insight_logger.log_types("SUCCESS", "This is a success log.")
-        insight_logger.log_types("FAILURE", "This is a failure log.")
-        insight_logger.log_types("WARNING", "This is a warning log.")
-        insight_logger.log_types("DEBUG", "This is a debug log.")
-        insight_logger.log_types("ALERT", "This is an alert log.")
-        insight_logger.log_types("TRACE", "This is a trace log.")
-        insight_logger.log_types("HIGHLIGHT", "This is a highlight log.")
-        insight_logger.log_types("CRITICAL", "This is a critical log.")
+        insight_logger.log_types("INFO", "🚀 This is an info log.")
+        insight_logger.log_types("ERROR", "💥 This is an error log.")
+        insight_logger.log_types("SUCCESS", "🎉 This is a success log.")
+        insight_logger.log_types("FAILURE", "💔 This is a failure log.")
+        insight_logger.log_types("WARNING", "⚠️ This is a warning log.")
+        insight_logger.log_types("DEBUG", "🐛 This is a debug log.")
+        insight_logger.log_types("ALERT", "🔔 This is an alert log.")
+        insight_logger.log_types("TRACE", "🔍 This is a trace log.")
+        insight_logger.log_types("HIGHLIGHT", "🌟 This is a highlight log.")
+        insight_logger.log_types("CRITICAL", "🔥 This is a critical log.")
 
         insight_logger.draw_and_save_graph()
 
         summary = insight_logger.generate_log_summary()
-        insight_logger.logger.info("\nSummary of Logs:\n" + summary)
+        insight_logger.logger.info(f"\n{colored('🌟 Summary of Logs:', 'magenta', attrs=['bold'])}\n" + summary)
 
     except Exception as e:
-        insight_logger.logger.error(f"Error initializing InsightLogger: {e}")
+        insight_logger.logger.error(f"💥 Error initializing InsightLogger: {e}")
 
 
 if __name__ == "__main__":
