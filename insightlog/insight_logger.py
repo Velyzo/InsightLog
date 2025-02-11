@@ -5,20 +5,28 @@ import time
 import platform
 import psutil
 import threading
-from termcolor import colored
+import itertools
 import matplotlib.pyplot as plt
+import numpy as np
 from collections import defaultdict
 from logging.handlers import RotatingFileHandler
+from termcolor import colored
 from tabulate import tabulate
-import itertools
+from functools import wraps
+import sys
+import io
 
+# Set the default encoding to UTF-8
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+
+# Ensure Insight Folder Creation
 def ensure_insight_folder():
     insight_dir = os.path.join(os.getcwd(), '.insight')
     if not os.path.exists(insight_dir):
         os.makedirs(insight_dir)
     return insight_dir
 
-
+# Logger Initialization with Rotating File Handler
 def start_logging(name, save_log="enabled", log_dir=".insight", log_filename="app.log", max_bytes=1000000, backup_count=1, log_level=logging.DEBUG):
     logger = logging.getLogger(name)
     if not logger.hasHandlers():
@@ -28,7 +36,7 @@ def start_logging(name, save_log="enabled", log_dir=".insight", log_filename="ap
             if not os.path.isdir(log_dir):
                 os.makedirs(log_dir)
 
-            log_file = os.path.join(log_dir, log_filename) 
+            log_file = os.path.join(log_dir, log_filename)
             file_handler = RotatingFileHandler(log_file, maxBytes=max_bytes, backupCount=backup_count)
             file_handler.setLevel(log_level)
             file_formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
@@ -43,18 +51,20 @@ def start_logging(name, save_log="enabled", log_dir=".insight", log_filename="ap
 
     return logger
 
-
+# Enhanced InsightLogger Class with Interactive Insights
 class InsightLogger:
     def __init__(self, name, save_log="enabled", log_dir=".insight", log_filename="app.log", max_bytes=1000000, backup_count=1, log_level=logging.DEBUG):
         self.logger = start_logging(name, save_log, log_dir, log_filename, max_bytes, backup_count, log_level)
         self.insight_dir = ensure_insight_folder()
         self.error_count = defaultdict(int)
+        self.execution_times = defaultdict(list)
+        self.function_error_count = defaultdict(int)
         self.start_time = datetime.datetime.now()
 
     def log_function_time(self, func):
         def wrapper(*args, **kwargs):
             start_time = time.time()
-            spinner = itertools.cycle(['⚙️', '🔄', '💨', '✨', '🔥', '🌟'])
+            spinner = itertools.cycle(['-', '/', '|', '\\'])
             elapsed_time_ms = 0
 
             def spin():
@@ -62,7 +72,6 @@ class InsightLogger:
                 while not self._stop_spin:
                     elapsed_time_ms = (time.time() - start_time) * 1000
                     print(f"\r{colored(f'{next(spinner)} Processing...', 'cyan', attrs=['bold'])} {elapsed_time_ms:.2f} ms", end="")
-                    time.sleep(0.1)
 
             self._stop_spin = False
             spin_thread = threading.Thread(target=spin, daemon=True)
@@ -74,6 +83,8 @@ class InsightLogger:
             elapsed_time_ms = (time.time() - start_time) * 1000
             print(f"\r{colored(f'✔️ {func.__name__} executed in {elapsed_time_ms:.2f} ms.', 'green', attrs=['bold'])}")
             self.logger.info(f"Function '{func.__name__}' executed in {elapsed_time_ms:.2f} ms.")
+            
+            self.execution_times[func.__name__].append(elapsed_time_ms)
             return result
         return wrapper
 
@@ -164,7 +175,36 @@ class InsightLogger:
 
         return summary_table
 
+    def view_insights(self):
+        print(f"\n{colored('Insights:', 'cyan', attrs=['bold'])}")
+        print("---------------------------------------------------")
+        
+        # Log Frequencies (Bar Chart)
+        self.draw_and_save_graph()
+        
+        # Log Summary
+        summary = self.generate_log_summary()
+        print(colored('Summary of Logs:', 'magenta', attrs=['bold']) + "\n" + summary)
+        
+        # Function Execution Times (Histogram)
+        if self.execution_times:
+            function_names = list(self.execution_times.keys())
+            times = [np.mean(self.execution_times[func]) for func in function_names]
 
+            fig, ax = plt.subplots()
+            ax.barh(function_names, times, color='lightgreen', edgecolor='darkgreen')
+            ax.set_xlabel('Average Execution Time (ms)', fontsize=12, fontweight='bold')
+            ax.set_title('Function Execution Times', fontsize=14, fontweight='bold')
+            fig.tight_layout()
+
+            file_path = os.path.join(self.insight_dir, 'function_execution_times.png')
+            plt.savefig(file_path)
+            plt.close()
+
+            self.logger.info(f"Function execution times graph saved to {file_path}")
+            print(f"\n{colored('Function Execution Times:', 'green', attrs=['bold'])} saved to {file_path}")
+
+# Main Function to Demonstrate Logger Usage
 def main():
     try:
         insight_logger = InsightLogger(name="InsightLog")
@@ -175,21 +215,18 @@ def main():
 
         example_function()
 
-        insight_logger.log_types("INFO", "🚀 This is an info log.")
-        insight_logger.log_types("ERROR", "💥 This is an error log.")
-        insight_logger.log_types("SUCCESS", "🎉 This is a success log.")
-        insight_logger.log_types("FAILURE", "💔 This is a failure log.")
-        insight_logger.log_types("WARNING", "⚠️ This is a warning log.")
-        insight_logger.log_types("DEBUG", "🐛 This is a debug log.")
-        insight_logger.log_types("ALERT", "🔔 This is an alert log.")
-        insight_logger.log_types("TRACE", "🔍 This is a trace log.")
-        insight_logger.log_types("HIGHLIGHT", "🌟 This is a highlight log.")
-        insight_logger.log_types("CRITICAL", "🔥 This is a critical log.")
+        insight_logger.log_types("INFO", "This is an info log.")
+        insight_logger.log_types("ERROR", "This is an error log.")
+        insight_logger.log_types("SUCCESS", "This is a success log.")
+        insight_logger.log_types("FAILURE", "This is a failure log.")
+        insight_logger.log_types("WARNING", "This is a warning log.")
+        insight_logger.log_types("DEBUG", "This is a debug log.")
+        insight_logger.log_types("ALERT", "This is an alert log.")
+        insight_logger.log_types("TRACE", "This is a trace log.")
+        insight_logger.log_types("HIGHLIGHT", "This is a highlight log.")
+        insight_logger.log_types("CRITICAL", "This is a critical log.")
 
-        insight_logger.draw_and_save_graph()
-
-        summary = insight_logger.generate_log_summary()
-        insight_logger.logger.info(f"\n{colored('🌟 Summary of Logs:', 'magenta', attrs=['bold'])}\n" + summary)
+        insight_logger.view_insights()
 
     except Exception as e:
         insight_logger.logger.error(f"💥 Error initializing InsightLogger: {e}")
