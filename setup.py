@@ -6,7 +6,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name='InsightLog',
-    version='1.2.3',
+    version='1.2.4',
     packages=find_packages(), 
     license='MIT',
     description='A customizable logging utility with enhanced features for developers.',
@@ -15,7 +15,7 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url='https://github.com/VelisCore/InsightLogger',
-    download_url='https://github.com/VelisCore/InsightLog/archive/refs/tags/v1.2.3.tar.gz',
+    download_url='https://github.com/VelisCore/InsightLog/archive/refs/tags/v1.2.4.tar.gz',
     keywords=[
         'logging', 'log', 'logger', 'developer tools', 'performance monitoring', 'visualization'
     ],
