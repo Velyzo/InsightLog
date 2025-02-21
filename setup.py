@@ -6,12 +6,12 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name='InsightLog',
-    version='1.2.4',
+    version='1.3.0',
     packages=find_packages(), 
     license='MIT',
     description='A customizable logging utility with enhanced features for developers.',
     author='VelisCore',
-    author_email='velis.help@web.de',
+    author_email='contact@velis.me',
     long_description=long_description,
     long_description_content_type="text/markdown",
     url='https://github.com/VelisCore/InsightLogger',
