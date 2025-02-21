@@ -52,14 +52,26 @@ class InsightLogger:
         self.error_count = defaultdict(int)
         self.execution_times = defaultdict(list)
         self.start_time = datetime.datetime.now()
-        self.logs = []
+        self.logs = self.load_logs()
+
+    def load_logs(self):
+        log_file_path = os.path.join(self.insight_dir, 'logs.json')
+        if os.path.exists(log_file_path):
+            with open(log_file_path, 'r') as f:
+                return json.load(f)
+        return []
+
+    def save_logs(self):
+        log_file_path = os.path.join(self.insight_dir, 'logs.json')
+        with open(log_file_path, 'w') as f:
+            json.dump(self.logs, f, indent=4)
 
     def log_function_time(self, func):
         @wraps(func)
         def wrapper(*args, **kwargs):
             start_time = time.perf_counter()
             spinner = itertools.cycle(['-', '/', '|', '\\'])
-            
+
             def spin():
                 while not self._stop_spin:
                     elapsed_time = (time.perf_counter() - start_time) * 1000
@@ -67,30 +79,41 @@ class InsightLogger:
                     mem_usage = psutil.virtual_memory().percent
                     print(f"\r{colored(next(spinner) + ' Processing...', 'cyan', attrs=['bold'])} {elapsed_time:.2f} ms | CPU: {cpu_usage}% | RAM: {mem_usage}%", end="")
                     time.sleep(0.1)
-            
+
             self._stop_spin = False
             spin_thread = threading.Thread(target=spin, daemon=True)
             spin_thread.start()
-            
+
             result = func(*args, **kwargs)
-            
+
             self._stop_spin = True
             elapsed_time = (time.perf_counter() - start_time) * 1000
             print(f"\r{colored(f'✔️ {func.__name__} executed in {elapsed_time:.2f} ms.', 'green', attrs=['bold'])}")
-            
+
+            log_entry = {
+                "timestamp": datetime.datetime.now().isoformat(),
+                "level": "INFO",
+                "message": f"Function '{func.__name__}' executed in {elapsed_time:.2f} ms."
+            }
+            self.logs.append(log_entry)
+            self.save_logs()
+
             self.logger.info(f"Function '{func.__name__}' executed in {elapsed_time:.2f} ms.")
             self.execution_times[func.__name__].append(elapsed_time)
             return result
         return wrapper
-    
+
     def log_message(self, level, message):
         self.error_count[level] += 1
-        log_entry = {"timestamp": datetime.datetime.now().isoformat(), "level": level, "message": message}
+        log_entry = {
+            "timestamp": datetime.datetime.now().isoformat(),
+            "level": level.upper(),
+            "message": message
+        }
         self.logs.append(log_entry)
-        with open(os.path.join(self.insight_dir, 'logs.json'), 'w') as f:
-            json.dump(self.logs, f, indent=4)
+        self.save_logs()
         self.logger.log(getattr(logging, level.upper(), logging.INFO), message)
-    
+
     def generate_insights(self):
         environment_info = {
             "Python Version": platform.python_version(),
@@ -102,10 +125,10 @@ class InsightLogger:
             "Memory": f"{psutil.virtual_memory().total / (1024**3):.2f} GB",
             "Uptime (s)": (datetime.datetime.now() - self.start_time).total_seconds()
         }
-        
+
         summary = tabulate(environment_info.items(), headers=["Metric", "Value"], tablefmt="fancy_grid")
         print(summary)
-        
+
         levels, counts = zip(*self.error_count.items()) if self.error_count else ([], [])
         if levels:
             plt.bar(levels, counts, color='skyblue', edgecolor='black')
@@ -116,27 +139,27 @@ class InsightLogger:
             plt.savefig(os.path.join(self.insight_dir, 'log_distribution.png'))
             plt.close()
             self.logger.info("Log distribution graph saved.")
-    
+
 # Example Usage
 def main():
     try:
         insight_logger = InsightLogger("InsightLog")
-        
+
         @insight_logger.log_function_time
         def example_function():
             time.sleep(1.5)
-        
+
         example_function()
-        
+
         insight_logger.log_message("INFO", "This is an info log.")
         insight_logger.log_message("ERROR", "This is an error log.")
         insight_logger.log_message("SUCCESS", "This is a success log.")
         insight_logger.log_message("WARNING", "This is a warning log.")
         insight_logger.log_message("DEBUG", "This is a debug log.")
         insight_logger.log_message("CRITICAL", "This is a critical log.")
-        
+
         insight_logger.generate_insights()
-    
+
     except Exception as e:
         print(colored(f"💥 Error: {e}", "red", attrs=["bold"]))
 

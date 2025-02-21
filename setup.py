@@ -6,7 +6,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name='InsightLog',
-    version='1.3.0',
+    version='1.3.1',
     packages=find_packages(), 
     license='MIT',
     description='A customizable logging utility with enhanced features for developers.',
