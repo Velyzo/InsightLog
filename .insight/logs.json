@@ -1,0 +1,32 @@
+[
+    {
+        "timestamp": "2025-02-21T14:05:28.882643",
+        "level": "INFO",
+        "message": "This is an info log."
+    },
+    {
+        "timestamp": "2025-02-21T14:05:28.884170",
+        "level": "ERROR",
+        "message": "This is an error log."
+    },
+    {
+        "timestamp": "2025-02-21T14:05:28.884961",
+        "level": "SUCCESS",
+        "message": "This is a success log."
+    },
+    {
+        "timestamp": "2025-02-21T14:05:28.885637",
+        "level": "WARNING",
+        "message": "This is a warning log."
+    },
+    {
+        "timestamp": "2025-02-21T14:05:28.886791",
+        "level": "DEBUG",
+        "message": "This is a debug log."
+    },
+    {
+        "timestamp": "2025-02-21T14:05:28.888622",
+        "level": "CRITICAL",
+        "message": "This is a critical log."
+    }
+]
