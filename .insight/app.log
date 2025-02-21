@@ -1,8 +1,0 @@
-2025-02-21 14:26:06,327 - INFO - Function 'example_function' executed in 1505.23 ms.
-2025-02-21 14:26:06,328 - INFO - This is an info log.
-2025-02-21 14:26:06,328 - ERROR - This is an error log.
-2025-02-21 14:26:06,328 - INFO - This is a success log.
-2025-02-21 14:26:06,329 - WARNING - This is a warning log.
-2025-02-21 14:26:06,329 - DEBUG - This is a debug log.
-2025-02-21 14:26:06,329 - CRITICAL - This is a critical log.
-2025-02-21 14:26:06,491 - INFO - Log distribution graph saved.
