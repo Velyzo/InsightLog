@@ -1,3 +1,3 @@
-from .insight_logger import InsightLogger
+from .insight_logger import InsightLog
 
 __all__ = ['InsightLogger']
