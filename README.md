@@ -18,7 +18,7 @@
 1. Clone the repository:
 
     ```bash
-    git clone https://github.com/VelisCore/InsightLogger.git
+    git clone https://github.com/Velyzo/InsightLogger.git
     ```
 
 2. Install the required dependencies:
@@ -150,7 +150,7 @@ For issues or feature requests, please open an issue.
 
 ## **Author**
 
-Developed by VelisCore.
+Developed by Velyzo.
 
 ## **Additional Notes**
 

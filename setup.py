@@ -9,12 +9,12 @@ setup(
     packages=find_packages(), 
     license='MIT',
     description='A customizable logging utility with enhanced features for developers.',
-    author='VelisCore',
-    author_email='contact@velis.me',
+    author='Velyzo',
+    author_email='contact@velyzo.de',
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url='https://github.com/VelisCore/InsightLog',
-    download_url='https://github.com/VelisCore/InsightLog/archive/refs/tags/v1.3.2.tar.gz',
+    url='https://github.com/Velyzo/InsightLog',
+    download_url='https://github.com/Velyzo/InsightLog/archive/refs/tags/v1.3.2.tar.gz',
     keywords=[
         'logging', 'log', 'logger', 'developer tools', 'performance monitoring', 'visualization'
     ],
@@ -39,8 +39,8 @@ setup(
         'Operating System :: OS Independent',
     ],
     project_urls={
-        'Bug Tracker': 'https://github.com/VelisCore/InsightLog/issues',
-        'Documentation': 'https://github.com/VelisCore/InsightLog/wiki',
-        'Source Code': 'https://github.com/VelisCore/InsightLog',
+        'Bug Tracker': 'https://github.com/Velyzo/InsightLog/issues',
+        'Documentation': 'https://github.com/Velyzo/InsightLog/wiki',
+        'Source Code': 'https://github.com/Velyzo/InsightLog',
     },
 )
