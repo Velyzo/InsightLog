@@ -1,15 +1,15 @@
 # **InsightLogger**
 
-`InsightLogger` is an advanced, customizable logging library designed for Python applications. It enables performance monitoring, detailed error logging, visual log representation, and execution summaries to gain better insights.
+`InsightLogger` is an advanced, customizable logging library designed for Python applications. It helps developers track application performance, log detailed error messages, visualize data through charts, and create summaries of application execution.
 
 ## **Features**
 
-- **Flexible Logging**: Supports multiple log levels (INFO, DEBUG, ERROR, etc.) with customizable formats and handles both console and file logs.
-- **Rotating Logs**: Automatically manages log file sizes and prevents excessive disk usage through rotating log files.
-- **Execution Time Tracking**: Use decorators to measure and log the execution time of functions, including a live spinning animation during function execution.
-- **Log Visualization**: Automatically generates bar charts that display the frequency of different log levels.
-- **Environmental Insights**: Captures and displays detailed runtime environment information, including system specs and resource usage.
-- **Advanced Log Formatting**: Adds visual styles like bold, underline, and headers to log messages for better clarity.
+- **Flexible Logging**: Supports multiple log levels (INFO, DEBUG, ERROR, etc.) with customizable formatting.
+- **Rotating Logs**: Automatically manages log file size to prevent excessive disk usage.
+- **Execution Time Tracking**: Decorate functions to measure and log execution time with live spinning animation.
+- **Log Visualization**: Automatically generate bar graphs showing log level frequencies.
+- **Environment Summary**: Generate detailed summaries of the runtime environment and execution statistics.
+- **Enhanced Formatting**: Add styles like bold, underline, headers, and more to log messages.
 
 ---
 
@@ -17,26 +17,27 @@
 
 1. Clone the repository:
 
-    ```bash
-    git clone https://github.com/Velyzo/InsightLogger.git
-    ```
+   ```bash
+   git clone https://github.com/VelisCore/InsightLogger.git
+   ```
 
-2. Install the required dependencies:
+2. Install required dependencies:
 
-    ```bash
-    pip install -r requirements.txt
-    ```
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-Dependencies include:
+   Dependencies include:
+   - `termcolor`
+   - `matplotlib`
+   - `tabulate`
+   - `psutil`
 
-- `termcolor` for colored console output.
-- `matplotlib` for visualizing logs.
-- `tabulate` for neatly formatted tables.
-- `psutil` for monitoring system resources.
+---
 
 ## **Usage**
 
-### Getting Started
+### **Getting Started**
 
 ```python
 from insightlog import InsightLogger
@@ -46,68 +47,55 @@ logger = InsightLogger(name="AppLog")
 
 @logger.log_function_time
 def example_function():
-     time.sleep(2)
+    time.sleep(2)
 
 # Logging
-logger.log("INFO", "This is an info log.")
-logger.log("ERROR", "An error occurred.")
+logger.log_types("INFO", "This is an info log.")
+logger.log_types("ERROR", "An error occurred.")
 
 # Visualize logs and generate a summary
-logger.generate_log_visualization()
-summary = logger.generate_execution_summary()
-logger.logger.info("\nLog Summary:\n" + summary)
+logger.draw_and_save_graph()
+summary = logger.generate_log_summary()
+logger.logger.info("\nSummary of Logs:\n" + summary)
 ```
 
-### Logging Example
+### **Decorators**
 
-You can log messages with various severity levels such as INFO, ERROR, SUCCESS, WARNING, etc.
-
-```python
-logger.log("INFO", "This is an info message.")
-logger.log("ERROR", "An error occurred.")
-```
-
-### Execution Time Tracking
-
-Use the `@log_function_time` decorator to measure and log the execution time of functions.
+Measure execution time for any function:
 
 ```python
 @logger.log_function_time
 def sample_function():
-     time.sleep(1.5)
+    time.sleep(1.5)
 ```
 
-### Log Levels
+### **Log Levels**
 
 Supported log levels include:
+- `INFO`
+- `ERROR`
+- `SUCCESS`
+- `FAILURE`
+- `WARNING`
+- `DEBUG`
+- `ALERT`
+- `TRACE`
+- `HIGHLIGHT`
+- `CRITICAL`
 
-- INFO
-- ERROR
-- SUCCESS
-- FAILURE
-- WARNING
-- DEBUG
-- ALERT
-- TRACE
-- CRITICAL
+### **Environment Summary**
 
-Each log level has its own format for console output.
+`InsightLogger` automatically collects environment information, such as:
+- Python version
+- Operating system and version
+- Machine specifications (CPU, memory, etc.)
+- Execution start and end times
 
-### Insights and Visualization
+---
 
-After logging, InsightLogger provides valuable insights including:
+## **Example Output**
 
-- **Environmental Info**: Python version, OS version, machine specs (CPU, memory, etc.), and uptime.
-- **Log Level Distribution**: A bar chart showing the frequency of each log level.
-
-```python
-logger.generate_environment_summary()  # Displays environment details
-logger.generate_log_visualization()    # Generates and saves the log distribution chart
-```
-
-### Sample Output
-
-Console Output:
+### Console Output
 
 ```
 [INFO] This is an info log.
@@ -115,44 +103,42 @@ Console Output:
 Function 'example_function' executed in 1500.12 ms.
 ```
 
-Environment Summary:
+### Summary Table
 
-| Environment Info | Details       |
-|------------------|---------------|
-| Python Version   | 3.10          |
-| OS               | Windows       |
-| RAM              | 16.00 GB      |
-| Total Errors     | 1             |
+| Environment Info       | Details                 |
+|------------------------|-------------------------|
+| Python Version         | 3.10                   |
+| Operating System       | Windows                |
+| Memory                 | 16.00 GB               |
+| Total Errors           | 1                      |
 
-Log Frequency Chart: (Bar chart displaying the frequency of different log levels)
+### Log Frequency Graph
 
-## **Advanced Features**
+![Log Frequency](.Insight/2023-12-01/log_frequency.png)
 
-- **Rotating Logs**: Configure log rotation to prevent excessive disk usage.
-- **Real-Time Execution Tracker**: Display the real-time execution time of functions with a live spinning animation.
-- **Error and Execution Tracking**: Track error counts, execution times, and resource usage (CPU, memory).
+---
 
-## **Contributing**
+## **Contribution**
 
-Contributions to InsightLogger are welcome. To contribute:
-
+We welcome contributions to `InsightLogger`. To contribute:
 1. Fork the repository.
 2. Create a new branch for your feature or bug fix.
-3. Submit a pull request with detailed descriptions of the changes.
+3. Submit a pull request with detailed descriptions of changes.
+
+---
 
 ## **License**
 
-InsightLogger is licensed under the MIT License. See LICENSE for details.
+`InsightLogger` is licensed under the MIT License. See `LICENSE` for details.
+
+---
 
 ## **Support**
 
-For issues or feature requests, please open an issue.
+For issues or feature requests, please [open an issue](https://github.com/VelisCore/InsightLogger/issues).
+
+---
 
 ## **Author**
 
-Developed by Velyzo.
-
-## **Additional Notes**
-
-- InsightLogger automatically creates a folder named `.insight` to store logs and visualizations.
-- The logging system supports both console output and file logs, with rotation based on size.
+Developed by **VelisCore**.

@@ -1,4 +1,0 @@
-termcolor
-matplotlib
-tabulate
-psutil
