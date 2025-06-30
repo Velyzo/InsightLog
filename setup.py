@@ -6,16 +6,16 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name='InsightLog',
-    version='1.4.0',
+    version='1.4.1',
     packages=find_packages(), 
     license='MIT',
     description='An advanced, feature-rich logging utility with real-time monitoring, performance profiling, anomaly detection, and comprehensive analytics for Python applications.',
-    author='VelisCore',
-    author_email='velis.help@web.de',
+    author='Velyzo',
+    author_email='help@velyzo.de',
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url='https://github.com/VelisCore/InsightLogger',
-    download_url='https://github.com/VelisCore/InsightLog/archive/refs/tags/v1.4.0.tar.gz',
+    url='https://github.com/Velyzo/InsightLogger',
+    download_url='https://github.com/Velyzo//InsightLog/archive/refs/tags/v1.4.1.tar.gz',
     keywords=[
         'logging', 'log', 'logger', 'monitoring', 'performance', 'profiling', 
         'analytics', 'dashboard', 'visualization', 'anomaly detection',
@@ -44,8 +44,8 @@ setup(
         'Operating System :: OS Independent',
     ],
     project_urls={
-        'Bug Tracker': 'https://github.com/VelisCore/InsightLog/issues',
-        'Documentation': 'https://github.com/VelisCore/InsightLog/wiki',
-        'Source Code': 'https://github.com/VelisCore/InsightLog',
+        'Bug Tracker': 'https://github.com/Velyzo/InsightLog/issues',
+        'Documentation': 'https://github.com/Velyzo/InsightLog/wiki',
+        'Source Code': 'https://github.com/Velyzo/InsightLog',
     },
 )

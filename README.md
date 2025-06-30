@@ -2,7 +2,7 @@
 
 [![Python Version](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://python.org)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-1.4.0-orange.svg)](https://github.com/VelisCore/InsightLog)
+[![Version](https://img.shields.io/badge/version-1.4.0-orange.svg)](https://github.com/Velyzo/InsightLog)
 
 **InsightLogger** is a powerful, enterprise-grade logging and monitoring library for Python applications. It provides comprehensive insights into your application's performance, system health, and behavior with real-time monitoring, advanced analytics, and beautiful visualizations.
 
@@ -76,7 +76,7 @@ The installation process remains **unchanged** to maintain compatibility:
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/VelisCore/InsightLogger.git
+   git clone https://github.com/Velyzo/InsightLogger.git
    cd InsightLogger
    ```
 
@@ -594,19 +594,19 @@ InsightLogger is licensed under the **MIT License**. See [LICENSE](LICENSE) for 
 
 ## **🔗 Links & Resources**
 
-- 📖 **Documentation**: [GitHub Wiki](https://github.com/VelisCore/InsightLog/wiki)
-- 🐛 **Bug Tracker**: [GitHub Issues](https://github.com/VelisCore/InsightLog/issues)
-- 💬 **Discussions**: [GitHub Discussions](https://github.com/VelisCore/InsightLog/discussions)
-- 📧 **Support**: [Email Support](mailto:velis.help@web.de)
+- 📖 **Documentation**: [GitHub Wiki](https://github.com/Velyzo/InsightLog/wiki)
+- 🐛 **Bug Tracker**: [GitHub Issues](https://github.com/Velyzo/InsightLog/issues)
+- 💬 **Discussions**: [GitHub Discussions](https://github.com/Velyzo/InsightLog/discussions)
+- 📧 **Support**: [Email Support](mailto:help@velyzo.de)
 
 ---
 
 ## **👨‍💻 Author**
 
-**InsightLogger v1.4** is developed and maintained by **VelisCore**.
+**InsightLogger v1.4** is developed and maintained by **Velyzo**.
 
-- 🌐 **GitHub**: [@VelisCore](https://github.com/VelisCore)
-- 📧 **Email**: velis.help@web.de
+- 🌐 **GitHub**: [@Velyzo](https://github.com/Velyzo)
+- 📧 **Email**: Velyzo.help@web.de
 
 ---
 

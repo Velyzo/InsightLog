@@ -47,7 +47,7 @@ sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
 # Version information
 __version__ = "1.4.0"
-__author__ = "VelisCore"
+__author__ = "Velyzo"
 __license__ = "MIT"
 
 # Helper functions for safe numpy operations
