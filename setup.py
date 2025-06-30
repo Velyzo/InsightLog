@@ -6,25 +6,29 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name='InsightLog',
-    version='1.2.4',
+    version='1.4.0',
     packages=find_packages(), 
     license='MIT',
-    description='A customizable logging utility with enhanced features for developers.',
+    description='An advanced, feature-rich logging utility with real-time monitoring, performance profiling, anomaly detection, and comprehensive analytics for Python applications.',
     author='VelisCore',
     author_email='velis.help@web.de',
     long_description=long_description,
     long_description_content_type="text/markdown",
     url='https://github.com/VelisCore/InsightLogger',
-    download_url='https://github.com/VelisCore/InsightLog/archive/refs/tags/v1.2.4.tar.gz',
+    download_url='https://github.com/VelisCore/InsightLog/archive/refs/tags/v1.4.0.tar.gz',
     keywords=[
-        'logging', 'log', 'logger', 'developer tools', 'performance monitoring', 'visualization'
+        'logging', 'log', 'logger', 'monitoring', 'performance', 'profiling', 
+        'analytics', 'dashboard', 'visualization', 'anomaly detection',
+        'system monitoring', 'developer tools', 'debugging', 'metrics',
+        'real-time monitoring', 'database logging', 'security logging'
     ],
     install_requires=[
-        'termcolor',
-        'matplotlib',
-        'tabulate',
-        'psutil',
-        'tqdm',
+        'termcolor>=2.0.0',
+        'matplotlib>=3.5.0',
+        'tabulate>=0.9.0',
+        'psutil>=5.8.0',
+        'numpy>=1.21.0',
+        'tqdm>=4.64.0',
     ],
     python_requires='>=3.9',
     classifiers=[
