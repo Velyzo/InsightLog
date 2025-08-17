@@ -35,3 +35,22 @@ Warning: potential issue detected
 2025-08-17 19:41:14,169 - INFO - Log frequency graph saved to C:\Users\kagon\Documents\GitHub\InsightLog\.insight\log_frequency_20250817_194113.png
 2025-08-17 19:41:14,728 - INFO - System metrics graph saved to C:\Users\kagon\Documents\GitHub\InsightLog\.insight\system_metrics_20250817_194113.png
 2025-08-17 19:41:15,354 - INFO - Function performance graph saved to C:\Users\kagon\Documents\GitHub\InsightLog\.insight\function_performance_20250817_194113.png
+2025-08-17 19:43:57,245 - CRITICAL - [5m[31m
+--------------------------------------------
+Critical: system stability at risk
+--------------------------------------------[0m
+2025-08-17 19:43:57,826 - DEBUG - [36m
+----------------------------------------
+Trace: detailed execution flow
+----------------------------------------[0m
+2025-08-17 19:43:58,017 - DEBUG - [1m[36m
+----------------------------------------
+Trace: detailed execution flow
+----------------------------------------[0m
+2025-08-17 19:43:58,573 - INFO - [33m
+--------------------------------------------
+Important: highlighted information
+--------------------------------------------[0m
+2025-08-17 19:44:01,215 - INFO - Function 'demo_function' executed in 1507.92ms (Memory: +0.0MB)
+2025-08-17 19:44:01,728 - INFO - Profile gui_demo_profiling: 504.19ms, Memory: +4.46MB
+2025-08-17 19:45:06,819 - INFO - InsightLogger monitoring stopped and resources cleaned up
