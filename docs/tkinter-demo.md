@@ -420,8 +420,8 @@ The demo creates various output files:
 
 1. **Download and Run**
    ```bash
-   git clone https://github.com/Velyzo/InsightLogger.git
-   cd InsightLogger
+   git clone https://github.com/Velyzo/InsightLog.git
+   cd InsightLog
    python tkinter_demo.py
    ```
 

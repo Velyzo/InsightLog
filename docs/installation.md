@@ -14,8 +14,8 @@ For the latest features and development version:
 
 ```bash
 # Clone the repository
-git clone https://github.com/Velyzo/InsightLogger.git
-cd InsightLogger
+git clone https://github.com/Velyzo/InsightLog.git
+cd InsightLog
 
 # Install in development mode
 pip install -e .
@@ -82,8 +82,8 @@ Installs only the essential dependencies for basic logging.
 
 ### Development Installation
 ```bash
-git clone https://github.com/Velyzo/InsightLogger.git
-cd InsightLogger
+git clone https://github.com/Velyzo/InsightLog.git
+cd InsightLog
 pip install -e .[dev]
 ```
 Includes development tools, testing frameworks, and documentation generators.

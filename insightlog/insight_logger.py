@@ -43,7 +43,26 @@ except ImportError:
                  "Install with: pip install matplotlib numpy", ImportWarning)
 
 # Set the default encoding to UTF-8
-sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+try:
+    if sys.platform.startswith('win'):
+        import codecs
+        sys.stdout = codecs.getwriter('utf-8')(sys.stdout.detach())
+        sys.stderr = codecs.getwriter('utf-8')(sys.stderr.detach())
+    else:
+        sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+except (AttributeError, UnicodeDecodeError):
+    # Fallback for environments where this doesn't work
+    pass
+
+# Unicode-safe print function for Windows
+def safe_print(text):
+    """Print text safely on Windows with Unicode support"""
+    try:
+        print(text)
+    except UnicodeEncodeError:
+        # Fallback: remove or replace problematic characters
+        safe_text = text.encode('ascii', 'replace').decode('ascii')
+        print(safe_text)
 
 # Version information
 __version__ = "1.4.0"
@@ -143,7 +162,8 @@ class InsightLogger:
     def __init__(self, name, save_log="enabled", log_dir=".insight", log_filename="app.log", 
                  max_bytes=1000000, backup_count=1, log_level=logging.DEBUG, 
                  enable_database=True, enable_monitoring=True, enable_alerts=False,
-                 alert_email=None, smtp_server=None, smtp_port=587, smtp_user=None, smtp_password=None):
+                 alert_email=None, smtp_server=None, smtp_port=587, smtp_user=None, smtp_password=None,
+                 enable_emojis=False):
         
         self.logger = start_logging(name, save_log, log_dir, log_filename, max_bytes, backup_count, log_level)
         self.insight_dir = ensure_insight_folder()
@@ -170,6 +190,7 @@ class InsightLogger:
         self.session_id = hashlib.md5(f"{name}{self.start_time}".encode()).hexdigest()[:8]
         self.enable_monitoring = enable_monitoring
         self.enable_alerts = enable_alerts
+        self.enable_emojis = enable_emojis
         self.alert_thresholds = {
             'cpu_usage': 80,
             'memory_usage': 85,
@@ -510,7 +531,7 @@ class InsightLogger:
             filename = f"insight_export_{timestamp}.json"
             filepath = os.path.join(self.insight_dir, filename)
             
-            with open(filepath, 'w') as f:
+            with open(filepath, 'w', encoding='utf-8') as f:
                 json.dump(export_data, f, indent=2, default=str)
                 
         elif format_type.lower() == "csv":
@@ -518,7 +539,7 @@ class InsightLogger:
             filename = f"insight_export_{timestamp}.csv"
             filepath = os.path.join(self.insight_dir, filename)
             
-            with open(filepath, 'w', newline='') as f:
+            with open(filepath, 'w', newline='', encoding='utf-8') as f:
                 writer = csv.writer(f)
                 writer.writerow(['Metric', 'Value'])
                 
@@ -534,6 +555,21 @@ class InsightLogger:
 
     def create_dashboard_html(self):
         """Create an HTML dashboard for real-time monitoring"""
+        
+        # Safely get current system metrics
+        current_cpu = self.cpu_usage[-1]['value'] if self.cpu_usage else 0
+        current_memory = self.memory_usage[-1]['value'] if self.memory_usage else 0
+        
+        # Determine status colors
+        cpu_status = 'green' if current_cpu < 70 else 'yellow' if current_cpu < 90 else 'red'
+        memory_status = 'green' if current_memory < 70 else 'yellow' if current_memory < 90 else 'red'
+        
+        # Get chart data safely
+        cpu_times = [item['timestamp'].strftime('%H:%M:%S') for item in list(self.cpu_usage)[-20:]] if self.cpu_usage else []
+        cpu_values = [item['value'] for item in list(self.cpu_usage)[-20:]] if self.cpu_usage else []
+        memory_times = [item['timestamp'].strftime('%H:%M:%S') for item in list(self.memory_usage)[-20:]] if self.memory_usage else []
+        memory_values = [item['value'] for item in list(self.memory_usage)[-20:]] if self.memory_usage else []
+        
         html_content = f"""
         <!DOCTYPE html>
         <html>
@@ -558,8 +594,8 @@ class InsightLogger:
             
             <div class="metric-card">
                 <h3>System Status</h3>
-                <p>CPU: <span class="status-{'green' if self.cpu_usage and self.cpu_usage[-1]['value'] < 70 else 'yellow' if self.cpu_usage and self.cpu_usage[-1]['value'] < 90 else 'red'}">{self.cpu_usage[-1]['value']:.1f}%</span></p>
-                <p>Memory: <span class="status-{'green' if self.memory_usage and self.memory_usage[-1]['value'] < 70 else 'yellow' if self.memory_usage and self.memory_usage[-1]['value'] < 90 else 'red'}">{self.memory_usage[-1]['value']:.1f}%</span></p>
+                <p>CPU: <span class="status-{cpu_status}">{current_cpu:.1f}%</span></p>
+                <p>Memory: <span class="status-{memory_status}">{current_memory:.1f}%</span></p>
             </div>
             
             <div class="metric-card">
@@ -585,15 +621,15 @@ class InsightLogger:
                 // JavaScript for live updating charts would go here
                 // This is a simplified static version
                 var trace1 = {{
-                    x: {[f"'{item['timestamp'].strftime('%H:%M:%S')}'" for item in list(self.cpu_usage)[-20:]]},
-                    y: {[item['value'] for item in list(self.cpu_usage)[-20:]]},
+                    x: {cpu_times},
+                    y: {cpu_values},
                     type: 'scatter',
                     name: 'CPU Usage %'
                 }};
                 
                 var trace2 = {{
-                    x: {[f"'{item['timestamp'].strftime('%H:%M:%S')}'" for item in list(self.memory_usage)[-20:]]},
-                    y: {[item['value'] for item in list(self.memory_usage)[-20:]]},
+                    x: {memory_times},
+                    y: {memory_values},
                     type: 'scatter',
                     name: 'Memory Usage %'
                 }};
@@ -605,7 +641,7 @@ class InsightLogger:
         """
         
         dashboard_path = os.path.join(self.insight_dir, f"dashboard_{self.session_id}.html")
-        with open(dashboard_path, 'w') as f:
+        with open(dashboard_path, 'w', encoding='utf-8') as f:
             f.write(html_content)
         
         self.logger.info(f"Dashboard created: {dashboard_path}")
@@ -679,7 +715,7 @@ class InsightLogger:
             return result
         return wrapper
 
-    def format_message(self, level, text, bold=False, background=None, border=False, header=False, underline=False, urgent=False, emoji=True):
+    def format_message(self, level, text, bold=False, background=None, border=False, header=False, underline=False, urgent=False, emoji=False):
         """Enhanced message formatting with emoji support"""
         colors = {
             "INFO": "cyan",
@@ -729,6 +765,9 @@ class InsightLogger:
     def log_types(self, level, text, **kwargs):
         """Enhanced logging with additional context and database storage"""
         self.error_count[level] += 1
+        # Use instance emoji setting as default if not specified
+        if 'emoji' not in kwargs:
+            kwargs['emoji'] = self.enable_emojis
         formatted_msg = self.format_message(level, text, **kwargs)
         
         # Current system state

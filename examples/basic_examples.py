@@ -20,10 +20,10 @@ def basic_logging_example():
         enable_monitoring=True
     )
     
-    # Basic log levels
-    logger.log_types("INFO", "Application started successfully", emoji=True, bold=True)
+    # Basic log levels (professional style by default)
+    logger.log_types("INFO", "Application started successfully", bold=True)
     logger.log_types("SUCCESS", "Database connection established", border=True)
-    logger.log_types("WARNING", "Configuration file not found, using defaults", background=True)
+    logger.log_types("WARNING", "Configuration file not found, using defaults")
     logger.log_types("ERROR", "Failed to connect to external API", urgent=True)
     logger.log_types("DEBUG", "Processing user request #12345")
     logger.log_types("TRACE", "Entering authentication module")
@@ -45,7 +45,28 @@ def basic_logging_example():
     
     # Cleanup
     logger.stop_monitoring()
-    print("\n✅ Basic demo completed!\n")
+    print("Basic demo completed!\n")
+
+def emoji_example():
+    """Demonstrate emoji usage when enabled"""
+    print("Emoji Usage Demo")
+    print("=" * 40)
+    
+    # Logger with emojis enabled
+    logger = InsightLogger(
+        name="EmojiDemo",
+        enable_emojis=True,  # Enable emojis for visual appeal
+        enable_database=False,
+        enable_monitoring=False
+    )
+    
+    # Log messages with emojis
+    logger.log_types("INFO", "Application started with emoji support")
+    logger.log_types("SUCCESS", "Task completed successfully")
+    logger.log_types("WARNING", "Low disk space warning")
+    logger.log_types("ERROR", "Connection timeout occurred")
+    
+    print("Emoji demo completed!\n")
 
 def advanced_features_example():
     """Demonstrate advanced monitoring and analytics features"""
@@ -263,18 +284,19 @@ def export_and_analysis_example():
         logger.view_insights(detailed=True)
 
 if __name__ == "__main__":
-    print("🚀 InsightLogger v1.4 - Comprehensive Examples")
+    print("InsightLogger v1.4 - Comprehensive Examples")
     print("=" * 50)
     print()
     
     try:
         # Run all examples
         basic_logging_example()
+        emoji_example()
         advanced_features_example()
         decorator_examples()
         export_and_analysis_example()
         
-        print("🎉 All examples completed successfully!")
+        print("All examples completed successfully!")
         print("\nCheck the '.insight' directory for generated files:")
         print("  • Log files and databases")
         print("  • Generated charts and graphs")
@@ -282,8 +304,8 @@ if __name__ == "__main__":
         print("  • Exported data files")
         
     except KeyboardInterrupt:
-        print("\n⏹️ Examples interrupted by user")
+        print("\nExamples interrupted by user")
     except Exception as e:
-        print(f"\n💥 Error in examples: {e}")
+        print(f"\nError in examples: {e}")
         import traceback
         traceback.print_exc()
