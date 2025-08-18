@@ -1,6 +1,6 @@
-# InsightLogger v1.4 - Examples Documentation
+# InsightLogger v1.5 - Examples Documentation
 
-This directory contains comprehensive examples demonstrating all the powerful features of InsightLogger v1.4. Each example is designed to showcase different aspects and use cases of the enhanced logging and monitoring library.
+This directory contains comprehensive examples demonstrating all the powerful features of InsightLogger v1.5. Each example is designed to showcase different aspects and use cases of the enhanced logging and monitoring library.
 
 ## 📁 Example Files
 
@@ -104,7 +104,7 @@ pip install numpy pandas
 ---
 
 ### 🧪 `test_all_features.py`
-**Comprehensive test suite for all InsightLogger v1.4 features**
+**Comprehensive test suite for all InsightLogger v1.5 features**
 
 - **Basic Functionality Tests**: Core logging and formatting features
 - **Enhanced Features Tests**: Database, monitoring, analytics
@@ -357,4 +357,4 @@ After running the examples:
 4. **Explore the generated data** in the SQLite database
 5. **Share your insights** and contribute improvements
 
-Remember: InsightLogger v1.4 is designed to be **backward compatible**, so you can start with basic logging and gradually enable more advanced features as needed!
+Remember: InsightLogger v1.5 is designed to be **backward compatible**, so you can start with basic logging and gradually enable more advanced features as needed!

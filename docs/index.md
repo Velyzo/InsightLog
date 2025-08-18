@@ -64,7 +64,7 @@ Scalable architecture with distributed logging, cloud integration, and enterpris
 
 ## 📈 Version Information
 
-- **Current Version**: 1.4.0
+- **Current Version**: 1.5.0
 - **Python Compatibility**: 3.9+
 - **License**: MIT
 - **Repository**: [GitHub](https://github.com/Velyzo/InsightLog)

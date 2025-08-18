@@ -35,7 +35,7 @@ python tkinter_demo.py
 
 ```
 ┌─────────────────────────────────────────────────────┐
-│                InsightLogger Demo v1.4             │
+│                InsightLogger Demo v1.5             │
 ├─────────────────────────────────────────────────────┤
 │  [Basic Logging] [Performance] [System Monitor]    │
 │  [Security]      [Analytics]   [Visualization]     │

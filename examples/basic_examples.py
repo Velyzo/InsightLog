@@ -1,5 +1,5 @@
 """
-InsightLogger v1.4 - Basic Usage Examples
+InsightLogger v1.5 - Basic Usage Examples
 
 This file demonstrates the basic usage of InsightLogger with all its enhanced features.
 """
@@ -284,7 +284,7 @@ def export_and_analysis_example():
         logger.view_insights(detailed=True)
 
 if __name__ == "__main__":
-    print("InsightLogger v1.4 - Comprehensive Examples")
+    print("InsightLogger v1.5 - Comprehensive Examples")
     print("=" * 50)
     print()
     

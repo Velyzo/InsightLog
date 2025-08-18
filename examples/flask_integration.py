@@ -1,5 +1,5 @@
 """
-InsightLogger v1.4 - Flask Web Application Integration Example
+InsightLogger v1.5 - Flask Web Application Integration Example
 
 This example demonstrates how to integrate InsightLogger with a Flask web application
 for comprehensive monitoring, logging, and analytics.
@@ -444,7 +444,7 @@ def simulate_background_tasks():
     bg_thread.start()
 
 if __name__ == '__main__':
-    print("🚀 Starting Flask Application with InsightLogger v1.4")
+    print("🚀 Starting Flask Application with InsightLogger v1.5")
     print("=" * 60)
     
     # Start background tasks

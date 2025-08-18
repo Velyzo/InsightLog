@@ -132,7 +132,7 @@ print("Available features:", features)
 
 Expected output:
 ```
-InsightLogger version: 1.4.0
+InsightLogger version: 1.5.0
 ✅ SUCCESS - Installation verified!
 Available features: ['logging', 'monitoring', 'analytics', 'visualization', 'database']
 ```

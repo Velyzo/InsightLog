@@ -65,7 +65,7 @@ def safe_print(text):
         print(safe_text)
 
 # Version information
-__version__ = "1.4.0"
+__version__ = "1.5.0"
 __author__ = "Velyzo"
 __license__ = "MIT"
 
@@ -139,12 +139,12 @@ def start_logging(name, save_log="enabled", log_dir=".insight", log_filename="ap
 
     return logger
 
-# Enhanced InsightLogger Class with Advanced Features v1.4
+# Enhanced InsightLogger Class with Advanced Features v1.5
 class InsightLogger:
     """
     Advanced logging utility with comprehensive monitoring, analytics, and reporting capabilities.
     
-    Features in v1.4:
+    Features in v1.5:
     - Real-time monitoring dashboard
     - Performance profiling
     - Memory usage tracking
@@ -1483,8 +1483,8 @@ class MetricsCollector:
 
 # Enhanced Main Function to Demonstrate New Features
 def main():
-    """Comprehensive demonstration of InsightLogger v1.4 features"""
-    print(f"{colored('🚀 InsightLogger v1.4 Feature Demonstration', 'cyan', attrs=['bold'])}")
+    """Comprehensive demonstration of InsightLogger v1.5 features"""
+    print(f"{colored('🚀 InsightLogger v1.5 Feature Demonstration', 'cyan', attrs=['bold'])}")
     print(f"{colored('=' * 50, 'cyan')}\n")
     
     try:

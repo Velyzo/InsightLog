@@ -1,5 +1,5 @@
 """
-Quick demo script to test InsightLogger v1.4 basic functionality without matplotlib
+Quick demo script to test InsightLogger v1.5 basic functionality without matplotlib
 """
 
 import sys
@@ -11,7 +11,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
 def test_without_matplotlib():
     """Test basic functionality without matplotlib dependency"""
-    print("🚀 Testing InsightLogger v1.4 - Basic Features")
+    print("🚀 Testing InsightLogger v1.5 - Basic Features")
     print("=" * 50)
     
     # Temporarily disable matplotlib import
@@ -41,7 +41,7 @@ def test_without_matplotlib():
         print("✅ Logger initialized with enhanced features")
         
         # Test all log levels
-        logger.log_types("SUCCESS", "InsightLogger v1.4 is working!", emoji=True, bold=True)
+        logger.log_types("SUCCESS", "InsightLogger v1.5 is working!", emoji=True, bold=True)
         logger.log_types("INFO", "Testing all enhanced features", emoji=True)
         logger.log_types("WARNING", "This is a warning message", emoji=True)
         logger.log_types("ERROR", "This is an error message", emoji=True)
@@ -102,7 +102,7 @@ def test_without_matplotlib():
         logger.stop_monitoring()
         
         print("\n🎉 ALL BASIC TESTS PASSED!")
-        print("InsightLogger v1.4 core functionality is working correctly!")
+        print("InsightLogger v1.5 core functionality is working correctly!")
         print("\nNote: Visualization features require matplotlib installation")
         print("Run 'pip install matplotlib' to enable charts and graphs")
         

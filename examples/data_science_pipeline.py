@@ -1,5 +1,5 @@
 """
-InsightLogger v1.4 - Data Science & Analytics Pipeline Example
+InsightLogger v1.5 - Data Science & Analytics Pipeline Example
 
 This example demonstrates how to use InsightLogger for monitoring
 data science workflows, machine learning pipelines, and analytics operations.
@@ -26,7 +26,7 @@ def create_sample_data(size=10000):
 def data_science_pipeline():
     """Complete data science pipeline with comprehensive monitoring"""
     
-    print("🔬 Data Science Pipeline with InsightLogger v1.4")
+    print("🔬 Data Science Pipeline with InsightLogger v1.5")
     print("=" * 60)
     
     # Initialize logger with enhanced features for data science
@@ -599,7 +599,7 @@ def ml_model_monitoring_example():
         logger.view_insights(detailed=True)
 
 if __name__ == "__main__":
-    print("🔬 InsightLogger v1.4 - Data Science & ML Pipeline Examples")
+    print("🔬 InsightLogger v1.5 - Data Science & ML Pipeline Examples")
     print("=" * 70)
     
     try:

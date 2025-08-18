@@ -6,7 +6,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name='InsightLog',
-    version='1.4.1',
+    version='1.5',
     packages=find_packages(), 
     license='MIT',
     description='An advanced, feature-rich logging utility with real-time monitoring, performance profiling, anomaly detection, and comprehensive analytics for Python applications.',
@@ -15,7 +15,7 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url='https://github.com/Velyzo/InsightLogger',
-    download_url='https://github.com/Velyzo//InsightLog/archive/refs/tags/v1.4.1.tar.gz',
+    download_url='https://github.com/Velyzo//InsightLog/archive/refs/tags/v1.5.tar.gz',
     keywords=[
         'logging', 'log', 'logger', 'monitoring', 'performance', 'profiling', 
         'analytics', 'dashboard', 'visualization', 'anomaly detection',

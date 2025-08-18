@@ -6,7 +6,7 @@ and feature of the InsightLogger library. It includes buttons, forms, and displa
 for comprehensive testing of all capabilities.
 
 Author: Velyzo
-Version: 1.4.0 Demo
+Version: 1.5.0 Demo
 """
 
 import tkinter as tk
@@ -31,7 +31,7 @@ except ImportError:
 class InsightLoggerDemo:
     def __init__(self, root):
         self.root = root
-        self.root.title("InsightLogger v1.4 - Comprehensive Testing Suite")
+        self.root.title("InsightLogger v1.5 - Comprehensive Testing Suite")
         self.root.geometry("1400x900")
         self.root.configure(bg='#f0f0f0')
         
@@ -59,7 +59,7 @@ class InsightLoggerDemo:
         main_frame.rowconfigure(1, weight=1)
         
         # Title
-        title_label = ttk.Label(main_frame, text="InsightLogger v1.4 - Complete Testing Suite", 
+        title_label = ttk.Label(main_frame, text="InsightLogger v1.5 - Complete Testing Suite", 
                                font=('Arial', 16, 'bold'))
         title_label.grid(row=0, column=0, columnspan=2, pady=(0, 10))
         

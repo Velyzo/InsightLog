@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-InsightLogger v1.4 - Comprehensive Test Suite
+InsightLogger v1.5 - Comprehensive Test Suite
 
-This script tests all the new features and enhancements in InsightLogger v1.4
+This script tests all the new features and enhancements in InsightLogger v1.5
 to ensure everything works correctly.
 """
 
@@ -432,7 +432,7 @@ def cleanup_test_files():
 
 def run_all_tests():
     """Run all test suites"""
-    print("🧪 InsightLogger v1.4 - Comprehensive Test Suite")
+    print("🧪 InsightLogger v1.5 - Comprehensive Test Suite")
     print("=" * 60)
     
     tests = [
@@ -468,7 +468,7 @@ def run_all_tests():
     print(f"📊 Success Rate: {(passed/(passed+failed))*100:.1f}%")
     
     if failed == 0:
-        print("\n🎉 All tests passed! InsightLogger v1.4 is working correctly!")
+        print("\n🎉 All tests passed! InsightLogger v1.5 is working correctly!")
     else:
         print(f"\n⚠️ {failed} test(s) failed. Please check the output above for details.")
     

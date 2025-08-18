@@ -51,7 +51,7 @@ fresh_env\Scripts\activate  # Windows
 source fresh_env/bin/activate  # Linux/Mac
 
 # Install with specific versions
-pip install insightlog==1.4.0
+pip install insightlog==1.5.0
 
 # Install without dependencies (advanced)
 pip install insightlog --no-deps
